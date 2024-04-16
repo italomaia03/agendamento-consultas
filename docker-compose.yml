@@ -1,0 +1,45 @@
+version: '3.5'
+services:
+
+  app:
+    image: 'agendamento-consultas-api'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agendamento-consultas
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/agendamentos"
+      SPRING_DATASOURCE_USERNAME: "admin"
+      SPRING_DATASOURCE_PASSWORD: "admin"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+    ports:
+      - "8080:8080"
+    networks:
+      - postgres
+
+  db:
+    container_name: agendamento-db
+    image: postgres:16.2-alpine3.19
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "agendamentos"
+      PG_DATA: "/data/postgres"
+
+    volumes:
+      - "$PWD/infra/postgres:/data/postgres"
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+volumes:
+  init:
+  data:
+
