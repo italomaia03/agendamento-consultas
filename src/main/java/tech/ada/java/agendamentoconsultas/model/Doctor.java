@@ -26,6 +26,6 @@ public class Doctor {
 
     private Boolean isActive;
 
-
+    private String specialty;
 
 }
