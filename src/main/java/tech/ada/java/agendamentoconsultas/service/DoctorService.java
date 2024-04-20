@@ -7,6 +7,7 @@ import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.respository.DoctorRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,10 @@ public class DoctorService {
     public List<Doctor> findALl() {
 
         return this.repository.findAll();
+    };
+
+    public Doctor findByUuid(UUID uuid){
+      return this.repository.findByUuid(uuid).orElseThrow(RuntimeException::new);
     };
 
 }
