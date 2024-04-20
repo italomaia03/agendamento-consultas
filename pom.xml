@@ -62,7 +62,16 @@
 			<artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
 			<version>2.0.3</version>
 		</dependency>
-        
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -73,5 +82,7 @@
             </plugin>
         </plugins>
     </build>
+
+
 
 </project>

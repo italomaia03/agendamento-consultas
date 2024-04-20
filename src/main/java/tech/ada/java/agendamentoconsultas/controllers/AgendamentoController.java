@@ -12,3 +12,4 @@ public class AgendamentoController {
         return "Agendamento consulta";
     }
 }
+
