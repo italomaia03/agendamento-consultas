@@ -23,4 +23,10 @@ public class DoctorService {
       return this.repository.findByUuid(uuid).orElseThrow(RuntimeException::new);
     };
 
+    public Doctor addDoctor(Doctor doctor){
+      return repository.save(doctor);
+    };
+
+
+
 }
