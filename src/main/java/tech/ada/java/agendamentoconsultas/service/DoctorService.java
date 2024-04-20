@@ -35,4 +35,8 @@ public class DoctorService {
         repository.save(newDoctor);
     }
 
+    public void delete(UUID uuid){
+      repository.deleteByUuid(uuid);
+    }
+
 }
