@@ -35,4 +35,9 @@ public class DoctorController {
         return service.addDoctor(doctor);
     }
 
+    @PutMapping("/{uuid}")
+    public void update(@PathVariable UUID uuid, @RequestBody Doctor doctor){
+        service.update(uuid,doctor);
+    }
+
 }
