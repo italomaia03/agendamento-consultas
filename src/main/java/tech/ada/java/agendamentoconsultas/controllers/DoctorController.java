@@ -36,8 +36,15 @@ public class DoctorController {
     }
 
     @PutMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable UUID uuid, @RequestBody Doctor doctor){
         service.update(uuid,doctor);
+    }
+
+    @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable UUID uuid){
+        service.delete(uuid);
     }
 
 }
