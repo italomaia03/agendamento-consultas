@@ -50,6 +50,14 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
+        <!-- Adiciona o Open Feign -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
         <!-- Adiciona o Swagger -->
         <dependency>
 			<groupId>org.springdoc</groupId>

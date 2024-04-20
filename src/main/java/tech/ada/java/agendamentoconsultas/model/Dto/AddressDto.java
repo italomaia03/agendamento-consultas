@@ -1,18 +1,6 @@
-package tech.ada.java.agendamentoconsultas.model;
+package tech.ada.java.agendamentoconsultas.model.Dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-
-@Entity
-public class Address {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotBlank(message = "O campo de CEP é obrigatório")
+public class AddressDto {
     private String cep;
     private String logradouro;
     private String complemento;
@@ -23,8 +11,9 @@ public class Address {
     private String gia;
     private String ddd;
     private String siafi;
-
-    public Address(String cep, String logradouro, String complemento, String bairro, String localidade, String uf,
+    public AddressDto() {
+    }
+    public AddressDto(String cep, String logradouro, String complemento, String bairro, String localidade, String uf,
             String ibge, String gia, String ddd, String siafi) {
         this.cep = cep;
         this.logradouro = logradouro;
@@ -36,15 +25,6 @@ public class Address {
         this.gia = gia;
         this.ddd = ddd;
         this.siafi = siafi;
-    }
-    public Address() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
     }
     public String getCep() {
         return cep;
@@ -108,5 +88,4 @@ public class Address {
     }
 
     
-
 }
