@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class DoctorService {
-    private DoctorRepository repository;
+    private final DoctorRepository repository;
     public List<Doctor> findALl() {
 
         return this.repository.findAll();

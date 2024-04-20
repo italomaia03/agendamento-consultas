@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DoctorController {
 
-    private DoctorService service;
+    private final DoctorService service;
 
     @GetMapping
 
