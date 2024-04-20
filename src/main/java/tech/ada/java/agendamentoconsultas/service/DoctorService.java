@@ -27,6 +27,12 @@ public class DoctorService {
       return repository.save(doctor);
     };
 
+    public void update(UUID uuid, Doctor newDoctor){
+        Doctor doctor = findByUuid(uuid);
 
+        newDoctor.setId(doctor.getId());
+
+        repository.save(newDoctor);
+    }
 
 }
