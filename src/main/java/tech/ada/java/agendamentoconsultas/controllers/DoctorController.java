@@ -1,10 +1,8 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.service.DoctorService;
 
@@ -29,6 +27,12 @@ public class DoctorController {
     @GetMapping("/{uuid}")
     public Doctor findByUuid(@PathVariable UUID uuid){
         return service.findByUuid(uuid);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Doctor addDoctor(@RequestBody Doctor doctor){
+        return service.addDoctor(doctor);
     }
 
 }
