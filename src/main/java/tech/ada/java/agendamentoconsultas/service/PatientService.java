@@ -1,5 +1,8 @@
 package tech.ada.java.agendamentoconsultas.service;
 
-public class PatientService {
-    
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
+
+public interface PatientService {
+    PatientDtoResponse createPatient(PatientDtoRequest request);
 }
