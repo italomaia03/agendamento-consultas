@@ -3,14 +3,15 @@ package tech.ada.java.agendamentoconsultas.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tech.ada.java.agendamentoconsultas.model.Doctor;
+import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoRequest;
+import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoResponse;
 import tech.ada.java.agendamentoconsultas.service.DoctorService;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/doctors")
+@RequestMapping("/api/v1/doctors")
 @RequiredArgsConstructor
 
 public class DoctorController {
@@ -18,27 +19,25 @@ public class DoctorController {
     private final DoctorService service;
 
     @GetMapping
-
-    public List<Doctor> findAll(){
-
+    public List<DoctorDtoResponse> findAll(){
         return this.service.findALl();
     }
 
     @GetMapping("/{uuid}")
-    public Doctor findByUuid(@PathVariable UUID uuid){
+    public DoctorDtoResponse findByUuid(@PathVariable UUID uuid){
         return service.findByUuid(uuid);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Doctor addDoctor(@RequestBody Doctor doctor){
-        return service.addDoctor(doctor);
+    public DoctorDtoResponse addDoctor(@RequestBody DoctorDtoRequest dto){
+        return service.addDoctor(dto);
     }
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable UUID uuid, @RequestBody Doctor doctor){
-        service.update(uuid,doctor);
+    public void update(@PathVariable UUID uuid, @RequestBody DoctorDtoRequest dto){
+        service.update(uuid,dto);
     }
 
     @DeleteMapping("/{uuid}")
