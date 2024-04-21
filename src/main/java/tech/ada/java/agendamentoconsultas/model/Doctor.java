@@ -15,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLRestriction("is_active = true")
-
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
