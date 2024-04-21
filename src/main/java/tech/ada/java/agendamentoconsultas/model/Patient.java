@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.Cascade;
+
 @Entity
 public class Patient {
     @Id
@@ -28,6 +30,7 @@ public class Patient {
     private LocalDateTime updateAt;
     @ManyToOne
     @JoinColumn(name = "id_endereco")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Address address;
 
 
