@@ -1,13 +1,11 @@
 package tech.ada.java.agendamentoconsultas.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
 
@@ -16,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("is_active = true")
 
 public class Doctor {
     @Id
@@ -26,12 +25,11 @@ public class Doctor {
 
     private Integer crm;
 
+    @Column(columnDefinition = "boolean DEFAULT true", insertable = false)
     private Boolean isActive;
 
     private String specialty;
 
+    @Column(columnDefinition = "uuid DEFAULT gen_random_uuid()", insertable = false)
     private UUID uuid;
-
-
-
 }
