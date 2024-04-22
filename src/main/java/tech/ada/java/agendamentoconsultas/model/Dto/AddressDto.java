@@ -4,6 +4,7 @@ public class AddressDto {
     private String cep;
     private String logradouro;
     private String complemento;
+    private Integer numero;
     private String bairro;
     private String localidade;
     private String uf;
@@ -13,11 +14,12 @@ public class AddressDto {
     private String siafi;
     public AddressDto() {
     }
-    public AddressDto(String cep, String logradouro, String complemento, String bairro, String localidade, String uf,
-            String ibge, String gia, String ddd, String siafi) {
+    public AddressDto(String cep, String logradouro, String complemento, Integer numero, String bairro, String localidade, String uf,
+                      String ibge, String gia, String ddd, String siafi) {
         this.cep = cep;
         this.logradouro = logradouro;
         this.complemento = complemento;
+        this.numero = numero;
         this.bairro = bairro;
         this.localidade = localidade;
         this.uf = uf;
@@ -46,6 +48,12 @@ public class AddressDto {
     }
     public String getBairro() {
         return bairro;
+    }
+    public Integer getNumero() {
+        return numero;
+    }
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
     public void setBairro(String bairro) {
         this.bairro = bairro;
