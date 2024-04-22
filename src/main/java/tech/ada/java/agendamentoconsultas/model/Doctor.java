@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
@@ -19,16 +20,15 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
-    private Integer crm;
-
-    @Column(columnDefinition = "boolean DEFAULT true", insertable = false)
-    private Boolean isActive;
-
+    private String crm;
+    private Boolean isActive = true;
     private String specialty;
+    private UUID uuid = UUID.randomUUID();
 
-    @Column(columnDefinition = "uuid DEFAULT gen_random_uuid()", insertable = false)
-    private UUID uuid;
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Address address;
+
 }
