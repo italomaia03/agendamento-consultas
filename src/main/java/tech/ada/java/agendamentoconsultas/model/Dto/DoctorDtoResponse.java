@@ -4,16 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorDtoResponse implements Serializable {
-    String name;
-    Integer crm;
-    Boolean isActive;
-    String specialty;
-    UUID uuid;
+public class DoctorDtoResponse {
+    private String name;
+    private String crm;
+    private Boolean isActive;
+    private String specialty;
+    private UUID uuid;
+    private AddressResponseDto address;
 }

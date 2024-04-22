@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorDtoRequest {
-    String name;
-    Integer crm;
-    String specialty;
+    private String name;
+    private String crm;
+    private String specialty;
+    private AddressRequestDto address;
 }
