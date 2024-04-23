@@ -18,6 +18,7 @@ public class Patient {
     private String nome;
     @NotBlank(message = "O email do usuário é obrigatório.")
     @Email(message = "Coloque um email em um formato válido(ex: usuario@dominio.com")
+    @Column(unique = true)
     private String email;
     @NotBlank(message = "O senha do usuário é obrigatória.")
     private String senha;
