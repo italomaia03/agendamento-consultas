@@ -13,9 +13,16 @@ public class RestControllerAdvice {
         return new ResponseEntity<>(errorResponse, ex.getHttpStatus());
     }
 
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
+        final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), ex.getHttpStatus(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, ex.getHttpStatus());
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

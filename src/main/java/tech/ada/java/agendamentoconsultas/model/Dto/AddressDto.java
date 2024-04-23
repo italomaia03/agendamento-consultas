@@ -1,6 +1,8 @@
 package tech.ada.java.agendamentoconsultas.model.Dto;
 
-public class AddressDto {
+import java.io.Serializable;
+
+public class AddressDto implements Serializable{
     private String cep;
     private String logradouro;
     private String complemento;
