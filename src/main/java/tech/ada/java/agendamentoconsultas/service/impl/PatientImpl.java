@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdatePasswordDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Patient;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
@@ -69,5 +70,21 @@ public class PatientImpl implements PatientService{
         paciente.setEmail(request.getEmail());
 
         patientRepository.save(paciente);
+    }
+
+    @Override
+    public void changePassword(PatientUpdatePasswordDto request, UUID uuid) {
+
+        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(PatientNotFoundException::new);
+        if(paciente.getSenha().equals(request.getSenha())){
+            if(request.getNovaSenha().equals(request.getConfirmacaoSenha())){
+                paciente.setSenha(request.getNovaSenha());
+                patientRepository.save(paciente);
+            } else {
+                throw new RuntimeException("A confirmação precisa ser igual a nova senha.");
+            }
+        } else {
+            throw new RuntimeException("Senha incorreta.");
+        }
     }
 }
