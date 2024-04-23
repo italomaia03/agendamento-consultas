@@ -2,6 +2,9 @@ package tech.ada.java.agendamentoconsultas.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 
 
@@ -27,9 +30,9 @@ public class PatientController {
         return patientService.createPatient(request);
     }
 
-    @PutMapping("/{email}")
+    @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody PatientUpdateRequestDto request, @PathVariable @Valid String email){
-        patientService.update(request, email);
+    public void update(@RequestBody PatientUpdateRequestDto request, @PathVariable @Valid UUID uuid){
+        patientService.update(request, uuid);
     }
 }

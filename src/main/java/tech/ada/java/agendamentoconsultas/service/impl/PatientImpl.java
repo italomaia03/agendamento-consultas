@@ -1,7 +1,7 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -58,15 +58,22 @@ public class PatientImpl implements PatientService{
         Patient patient = new Patient(request.getNome(), request.getEmail(), request.getSenha(), request.getTelefone(), request.getCpf(), address);
         patientRepository.save(patient);
         
-        return new PatientDtoResponse(request.getNome(), request.getEmail(), request.getCpf());
+        return new PatientDtoResponse(request.getNome(), request.getEmail(), patient.getUuid());
     }
 
     @Override
-    public void update(PatientUpdateRequestDto request, String email) {
-        Patient paciente = patientRepository.findByEmail(email).orElseThrow(( )->new RuntimeException("Paciente não encontrado"));
+    public void update(PatientUpdateRequestDto request, UUID uuid) {
+        
+        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(()->new RuntimeException("Paciente não encontrado"));
+
+        if(request.getEmail() == null || request.getEmail().isBlank()) request.setEmail(paciente.getEmail());
+        if(request.getNome() == null || request.getNome().isBlank()) request.setNome(paciente.getNome());
+        if(request.getTelefone() == null || request.getTelefone().isBlank()) request.setTelefone(paciente.getTelefone());
+
         paciente.setTelefone(request.getTelefone());
         paciente.setNome(request.getNome());
         paciente.setEmail(request.getEmail());
+
         patientRepository.save(paciente);
     }
 }
