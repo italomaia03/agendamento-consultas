@@ -7,6 +7,6 @@ import tech.ada.java.agendamentoconsultas.model.Patient;
 import java.util.Optional;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, String> {
+public interface PatientRepository extends JpaRepository<Patient, Long> {
    Optional<Patient> findByEmail(String email);
 }
