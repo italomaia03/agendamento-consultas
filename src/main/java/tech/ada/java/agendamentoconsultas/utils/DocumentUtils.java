@@ -2,8 +2,8 @@ package tech.ada.java.agendamentoconsultas.utils;
 
 public class DocumentUtils {
     public static Boolean cpfIsValid(String cpf){
-        String document = cpf;
-        cpf = document.replaceAll("[^0-9]", "");
+        
+        cpf = cpf.replaceAll("[^0-9]", "");
 
         if(cpf.length() != 11) return false;
         if(cpf.matches("(\\d)\\1*")) return false;
