@@ -68,6 +68,7 @@ public class PatientImpl implements PatientService{
         paciente.setTelefone(request.getTelefone());
         paciente.setNome(request.getNome());
         paciente.setEmail(request.getEmail());
+        paciente.setUpdateAt(LocalDateTime.now());
 
         patientRepository.save(paciente);
     }
