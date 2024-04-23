@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.hibernate.annotations.Cascade;
 
@@ -14,6 +15,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private UUID uuid;
     @NotBlank(message = "O nome do usuário é obrigatório.")
     private String nome;
     @NotBlank(message = "O email do usuário é obrigatório.")
@@ -45,6 +47,23 @@ public class Patient {
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
         this.address = address;
+        this.uuid = UUID.randomUUID();
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Patient() {}
