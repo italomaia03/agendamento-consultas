@@ -9,6 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-   Optional<Patient> findByEmail(String email);
    Optional<Patient> findByUuid(UUID uuid);
 }
