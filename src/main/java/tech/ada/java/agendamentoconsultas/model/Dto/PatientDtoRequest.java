@@ -2,11 +2,19 @@ package tech.ada.java.agendamentoconsultas.model.Dto;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import tech.ada.java.agendamentoconsultas.utils.DocumentUtils;
+
 public class PatientDtoRequest implements Serializable{
-    
+    @Pattern(regexp = "^[\\p{L}]+$", message = "O nome deve conter apenas caracteres alfabéticos.")
     private String nome;
+    @Email(message = "Coloque um email em um formato válido(ex: usuario@dominio.com")
     private String email;
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_*#@]).{8,32}$",
+    message = "A senha deve conter de 8 a 20 caracteres (lowercase, uppercase, numbers, special(_,*,#,@))")
     private String senha;
+    @Pattern(regexp = "^\\(?(\\d{2})\\)?\\s?(\\d{4,5})-?(\\d{4})$", message = "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.")
     private String telefone;
     private String cpf;
     private AddressRequestDto addressRequestDto;
@@ -16,7 +24,7 @@ public class PatientDtoRequest implements Serializable{
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
-        this.cpf = cpf;
+        this.setCpf(cpf);
         this.addressRequestDto = addressRequestDto;
     }
 
@@ -51,7 +59,10 @@ public class PatientDtoRequest implements Serializable{
         return cpf;
     }
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        if(DocumentUtils.cpfIsValid(cpf)){
+            this.cpf = cpf;
+        }
+        throw new RuntimeException("O cpf fornecido está inválido");
     }
 
     public AddressRequestDto getAddressRequestDto() {

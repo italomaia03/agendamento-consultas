@@ -64,11 +64,7 @@ public class PatientImpl implements PatientService{
     @Override
     public void update(PatientUpdateRequestDto request, UUID uuid) {
         
-        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(()->new RuntimeException("Paciente não encontrado"));
-
-        if(request.getEmail() == null || request.getEmail().isBlank()) request.setEmail(paciente.getEmail());
-        if(request.getNome() == null || request.getNome().isBlank()) request.setNome(paciente.getNome());
-        if(request.getTelefone() == null || request.getTelefone().isBlank()) request.setTelefone(paciente.getTelefone());
+        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(()-> new RuntimeException("Paciente não encontrado"));
 
         paciente.setTelefone(request.getTelefone());
         paciente.setNome(request.getNome());
