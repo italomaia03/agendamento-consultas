@@ -1,7 +1,9 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -9,11 +11,8 @@ import org.springframework.stereotype.Service;
 import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdatePasswordDto;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
+import tech.ada.java.agendamentoconsultas.model.Dto.*;
 import tech.ada.java.agendamentoconsultas.model.Patient;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
 import tech.ada.java.agendamentoconsultas.repository.AddressRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
@@ -23,7 +22,6 @@ import tech.ada.java.agendamentoconsultas.utils.DocumentUtils;
 
 @Service
 public class PatientImpl implements PatientService{
-
     private final PatientRepository patientRepository;
     private final ViaCepService viaCepService;
     private final AddressRepository addressRepository;
@@ -35,6 +33,8 @@ public class PatientImpl implements PatientService{
         this.addressRepository = addressRepository;
         this.viaCepService = viaCepService;
     }
+
+
 
     @Override
     public PatientDtoResponse createPatient(PatientDtoRequest request) {
@@ -87,4 +87,11 @@ public class PatientImpl implements PatientService{
             throw new RuntimeException("Senha incorreta.");
         }
     }
+
+    @Override
+    public List<PatientGetAllResponseDto> getAll() {
+        return patientRepository.findAll()
+                .stream().map(elemento -> this.modelMapper.map(elemento, PatientGetAllResponseDto.class)).toList();
+    }
+
 }
