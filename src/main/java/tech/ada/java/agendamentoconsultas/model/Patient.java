@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.Cascade;
 
 @Entity
@@ -22,6 +24,10 @@ public class Patient {
     @Email(message = "Coloque um email em um formato válido(ex: usuario@dominio.com")
     @Column(unique = true)
     private String email;
+
+    @NotNull
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_*#@]).{8,32}$",
+    message = "A senha deve conter de 8 a 20 caracteres (lowercase, uppercase, numbers, special(_,*,#,@))")
     @NotBlank(message = "O senha do usuário é obrigatória.")
     private String senha;
     @NotBlank(message = "O telefone do usuário é obrigatório.")
