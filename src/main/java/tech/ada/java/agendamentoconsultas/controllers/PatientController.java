@@ -32,7 +32,7 @@ public class PatientController {
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody PatientUpdateRequestDto request, @PathVariable @Valid UUID uuid){
+    public void update(@RequestBody @Valid PatientUpdateRequestDto request, @PathVariable UUID uuid){
         patientService.update(request, uuid);
     }
 }
