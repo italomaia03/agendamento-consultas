@@ -3,12 +3,10 @@ package tech.ada.java.agendamentoconsultas.controllers;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdatePasswordDto;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
+import tech.ada.java.agendamentoconsultas.model.Dto.*;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -38,5 +36,10 @@ public class PatientController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@RequestBody @Valid PatientUpdatePasswordDto request, @PathVariable UUID uuid) {
         patientService.changePassword(request, uuid);
+    }
+
+    @GetMapping
+    public List<PatientGetAllResponseDto> getAll() {
+        return patientService.getAll();
     }
 }
