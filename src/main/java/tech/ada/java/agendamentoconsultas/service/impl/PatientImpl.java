@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import tech.ada.java.agendamentoconsultas.model.Address;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Patient;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
@@ -60,4 +61,12 @@ public class PatientImpl implements PatientService{
         return new PatientDtoResponse(request.getNome(), request.getEmail(), request.getCpf());
     }
 
+    @Override
+    public void update(PatientUpdateRequestDto request, String email) {
+        Patient paciente = patientRepository.findByEmail(email).orElseThrow(( )->new RuntimeException("Paciente não encontrado"));
+        paciente.setTelefone(request.getTelefone());
+        paciente.setNome(request.getNome());
+        paciente.setEmail(request.getEmail());
+        patientRepository.save(paciente);
+    }
 }
