@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
@@ -36,12 +37,8 @@ public class PatientImpl implements PatientService{
 
     @Override
     public PatientDtoResponse createPatient(PatientDtoRequest request) {
-
-        if(request.getCpf() == null || request.getCpf().isBlank()) throw new RuntimeException("O cpf do paciente não pode ser vazio");
-        if(!DocumentUtils.cpfIsValid(request.getCpf())) throw new RuntimeException("O cpf do paciente não é válido");
-        if(!CepUtils.isValidCep(request.getAddressRequestDto().getCep())) throw new RuntimeException("O CEP do paciente não é válido");
         
-        Optional<Address> optionalAddress = addressRepository.findByCep(request.getAddressRequestDto().getCep());
+        Optional<Address> optionalAddress = addressRepository.findByCep(CepUtils.removeNotNumberCharToCep(request.getAddressRequestDto().getCep()));
         Address address = new Address();
 
         try {
@@ -53,7 +50,7 @@ public class PatientImpl implements PatientService{
                 addressRepository.save(address);
             }
         } catch (RuntimeException e) {
-            throw new RuntimeException("Não foi possível localizar o Cep ou o Cep enviado está inválido");
+            throw new CepNotFoundException(request.getAddressRequestDto().getCep());
         }
 
         Patient patient = new Patient(request.getNome(), request.getEmail(), request.getSenha(), request.getTelefone(), request.getCpf(), address);
