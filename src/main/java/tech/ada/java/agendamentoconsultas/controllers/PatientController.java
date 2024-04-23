@@ -1,16 +1,14 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -27,5 +25,11 @@ public class PatientController {
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDtoResponse createPatient(@RequestBody PatientDtoRequest request){
         return patientService.createPatient(request);
+    }
+
+    @PutMapping("/{email}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody PatientUpdateRequestDto request, @PathVariable @Valid String email){
+        patientService.update(request, email);
     }
 }
