@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import tech.ada.java.agendamentoconsultas.exception.CpfNotValidException;
 import tech.ada.java.agendamentoconsultas.utils.DocumentUtils;
 
 public class PatientDtoRequest implements Serializable{
@@ -62,7 +63,7 @@ public class PatientDtoRequest implements Serializable{
         if(DocumentUtils.cpfIsValid(cpf)){
             this.cpf = cpf;
         }
-        throw new RuntimeException("O cpf fornecido está inválido");
+        throw new CpfNotValidException();
     }
 
     public AddressRequestDto getAddressRequestDto() {

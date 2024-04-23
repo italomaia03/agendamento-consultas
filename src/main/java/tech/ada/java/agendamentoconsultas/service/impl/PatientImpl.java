@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Patient;
@@ -64,7 +65,7 @@ public class PatientImpl implements PatientService{
     @Override
     public void update(PatientUpdateRequestDto request, UUID uuid) {
         
-        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(()-> new RuntimeException("Paciente não encontrado"));
+        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(PatientNotFoundException::new);
 
         paciente.setTelefone(request.getTelefone());
         paciente.setNome(request.getNome());
