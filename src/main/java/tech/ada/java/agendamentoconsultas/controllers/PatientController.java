@@ -26,7 +26,7 @@ public class PatientController {
 
     @PostMapping("/sing-in")
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientDtoResponse createPatient(@RequestBody PatientDtoRequest request){
+    public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request){
         return patientService.createPatient(request);
     }
 
