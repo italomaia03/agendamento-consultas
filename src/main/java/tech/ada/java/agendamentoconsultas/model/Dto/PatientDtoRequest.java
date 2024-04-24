@@ -60,10 +60,9 @@ public class PatientDtoRequest implements Serializable{
         return cpf;
     }
     public void setCpf(String cpf) {
-        if(DocumentUtils.cpfIsValid(cpf)){
-            this.cpf = cpf;
-        }
-        throw new CpfNotValidException();
+        if(!DocumentUtils.cpfIsValid(cpf))
+            throw new CpfNotValidException();
+        this.cpf = cpf;
     }
 
     public AddressRequestDto getAddressRequestDto() {
