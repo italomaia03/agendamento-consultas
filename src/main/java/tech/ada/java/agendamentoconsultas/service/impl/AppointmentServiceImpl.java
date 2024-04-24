@@ -16,6 +16,7 @@ import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
 import tech.ada.java.agendamentoconsultas.service.AppointmentService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +51,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<AppointmentResponseDto> findAllByDoctorUuid(UUID doctorUuid) {
         return appointmentRepository.findAllByDoctorUuid(doctorUuid).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
+    }
+
+    @Override
+    public List<AppointmentResponseDto> findAllByDoctorUuidAndAppointmentDate(UUID doctorUuid, LocalDate date) {
+        return appointmentRepository.findAllByDoctorUuidAndAppointmentDate(doctorUuid, date).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
     }
 
 
