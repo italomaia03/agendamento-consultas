@@ -46,4 +46,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<AppointmentResponseDto> findAllByPatientUuid(UUID patientUuid) {
         return appointmentRepository.findAllByPatientUuid(patientUuid).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
     }
+
+    @Override
+    public List<AppointmentResponseDto> findAllByDoctorUuid(UUID doctorUuid) {
+        return appointmentRepository.findAllByDoctorUuid(doctorUuid).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
+    }
+
+
 }

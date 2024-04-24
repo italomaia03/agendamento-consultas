@@ -10,4 +10,6 @@ public interface AppointmentService {
     AppointmentResponseDto create(AppointmentRequestDto request, UUID doctorUuid, UUID patientUuid);
 
     List<AppointmentResponseDto> findAllByPatientUuid(UUID patientUuid);
+
+    List<AppointmentResponseDto> findAllByDoctorUuid(UUID doctorUuid);
 }
