@@ -7,7 +7,6 @@ import tech.ada.java.agendamentoconsultas.model.Appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,4 +24,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
         List<Appointment> findAllByDoctorUuid(UUID doctorUuid);
 
+        List<Appointment> findAllByDoctorUuidAndAppointmentDate(UUID doctorUuid, LocalDate date);
 }
