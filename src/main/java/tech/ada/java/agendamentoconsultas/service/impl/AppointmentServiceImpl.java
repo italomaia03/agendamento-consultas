@@ -16,6 +16,7 @@ import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
 import tech.ada.java.agendamentoconsultas.service.AppointmentService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,5 +40,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setPatient(patient);
         appointment.setAppointmentEndTime(request.getAppointmentStartTime().plusHours(1L));
         return modelMapper.map(appointmentRepository.save(appointment), AppointmentResponseDto.class);
+    }
+
+    @Override
+    public List<AppointmentResponseDto> findAllByPatientUuid(UUID patientUuid) {
+        return appointmentRepository.findAllByPatientUuid(patientUuid).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
     }
 }
