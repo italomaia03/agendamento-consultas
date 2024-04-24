@@ -7,6 +7,7 @@ import tech.ada.java.agendamentoconsultas.model.Appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -15,7 +16,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             where a.appointmentDate = :appointmentDate and a.doctor.uuid = :doctorUuid and :startTime between a.appointmentStartTime and a.appointmentEndTime""")
     boolean appointmentExists(@Param("appointmentDate") LocalDate appointmentDate,
                               @Param("doctorUuid") UUID doctorUuid,
-                              @Param("appointmentStartTimeStart") LocalTime appointmentStartTimeStart);
+                              @Param("startTime") LocalTime appointmentStartTimeStart);
 
 
+
+        List<Appointment> findAllByPatientUuid(UUID patientUuid);
 }
