@@ -12,17 +12,22 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/patients")
+@RequestMapping("/api/v1")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
-    @GetMapping ("/{patientUuid}")
+    @GetMapping ("/patients/{patientUuid}/appointments")
     public List<AppointmentResponseDto> findAllByPatientUuid(@PathVariable UUID patientUuid) {
         return appointmentService.findAllByPatientUuid(patientUuid);
     }
 
-    @PostMapping("/{patientUuid}/doctors/{doctorUuid}")
+    @GetMapping ("/doctors/{doctorUuid}/appointments")
+    public List<AppointmentResponseDto> findAllByDoctorUuid(@PathVariable UUID doctorUuid) {
+        return appointmentService.findAllByDoctorUuid(doctorUuid);
+    }
+
+    @PostMapping("/patients/{patientUuid}/doctors/{doctorUuid}")
     public AppointmentResponseDto create(@RequestBody @Valid AppointmentRequestDto request, @PathVariable UUID doctorUuid, @PathVariable UUID patientUuid) {
         return appointmentService.create(request, doctorUuid, patientUuid);
     }
