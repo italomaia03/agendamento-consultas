@@ -7,7 +7,9 @@ import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentResponseDto;
 import tech.ada.java.agendamentoconsultas.service.AppointmentService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +25,10 @@ public class AppointmentController {
     }
 
     @GetMapping ("/doctors/{doctorUuid}/appointments")
-    public List<AppointmentResponseDto> findAllByDoctorUuid(@PathVariable UUID doctorUuid) {
+    public List<AppointmentResponseDto> findAllByDoctorUuid(@RequestParam("exact-date") Optional<LocalDate> date, @PathVariable UUID doctorUuid) {
+        if(date.isPresent()) {
+         return appointmentService.findAllByDoctorUuidAndAppointmentDate(doctorUuid, date.get());
+        }
         return appointmentService.findAllByDoctorUuid(doctorUuid);
     }
 
