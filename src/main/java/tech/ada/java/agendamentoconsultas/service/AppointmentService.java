@@ -2,6 +2,7 @@ package tech.ada.java.agendamentoconsultas.service;
 
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentResponseDto;
+import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentUpdateRequestDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface AppointmentService {
     List<AppointmentResponseDto> findAllByDoctorUuid(UUID doctorUuid);
 
     List<AppointmentResponseDto> findAllByDoctorUuidAndAppointmentDate(UUID doctorUuid, LocalDate date);
+
+    void update(AppointmentUpdateRequestDto request, UUID patientUuid, UUID appointmentUuid);
 }
