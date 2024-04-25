@@ -4,10 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
+import tech.ada.java.agendamentoconsultas.model.Doctor;
+import tech.ada.java.agendamentoconsultas.model.Patient;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -21,6 +24,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
         List<Appointment> findAllByPatientUuid(UUID patientUuid);
+
+        Optional<Appointment> findByPatientAndDoctor(Patient patient, Doctor doctor);
 
         List<Appointment> findAllByDoctorUuid(UUID doctorUuid);
 
