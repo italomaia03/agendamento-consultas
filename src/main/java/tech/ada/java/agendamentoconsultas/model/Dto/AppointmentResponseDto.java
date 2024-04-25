@@ -15,6 +15,8 @@ public class AppointmentResponseDto implements Serializable {
     private LocalDate appointmentDate;
     private LocalTime appointmentStartTime;
     private LocalTime appointmentEndTime;
+    private String appointmentStatus;
+    private String appointmentDescription;
     private DoctorAppointmentResponseDto doctor;
     private PatientAppointmentResponseDto patient;
 }

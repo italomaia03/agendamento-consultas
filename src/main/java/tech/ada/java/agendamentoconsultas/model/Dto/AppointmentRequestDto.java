@@ -20,6 +20,7 @@ public class AppointmentRequestDto implements Serializable {
     private LocalDate appointmentDate;
     @NotNull
     @FutureOrPresent(message = "Informe um horário válido")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime appointmentStartTime;
+    private String appointmentDescription;
 }
