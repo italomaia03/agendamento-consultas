@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -19,9 +20,11 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private UUID uuid = UUID.randomUUID();
     private LocalDate appointmentDate;
     private LocalTime appointmentStartTime;
     private LocalTime appointmentEndTime;
+    private String appointmentDescription;
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
