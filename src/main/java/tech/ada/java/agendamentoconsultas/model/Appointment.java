@@ -34,7 +34,3 @@ public class Appointment {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 }
-
-enum AppointmentStatus {
-    WAITING, APPROVED, REJECTED
-}
