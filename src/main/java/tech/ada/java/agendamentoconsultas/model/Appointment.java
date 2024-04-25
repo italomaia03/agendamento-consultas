@@ -15,7 +15,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Getter
 @Setter
-@SQLRestriction("appointment_status = WAITING")
+@SQLRestriction("appointment_status = 'WAITING'")
 public class Appointment {
 
     @Id
