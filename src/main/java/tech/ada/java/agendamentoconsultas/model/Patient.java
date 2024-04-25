@@ -4,19 +4,37 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import tech.ada.java.agendamentoconsultas.model.enums.UserRole;
+
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @SQLRestriction("is_active = true")
-public class Patient {
+@EqualsAndHashCode(of = "uuid")
+public class Patient implements UserDetails{
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private UUID uuid;
     @NotBlank(message = "O nome do usuário é obrigatório.")
     private String nome;
@@ -30,14 +48,20 @@ public class Patient {
     private String telefone;
     @NotBlank(message = "O cpf do usuário é obrigatório.")
     private String cpf;
-    private Boolean isActive;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    
+    private Boolean isActive;
+    private Boolean accountExpired;
+    private Boolean credentialsExpired;
+    private Boolean accountLocked;
+    
     @ManyToOne
     @JoinColumn(name = "id_endereco")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Address address;
 
+    private UserRole role;
 
     public Patient(String nome, String email, String senha, String telefone, String cpf, Address address) {
         this.nome = nome;
@@ -45,108 +69,49 @@ public class Patient {
         this.senha = senha;
         this.telefone = telefone;
         this.cpf = cpf;
-        this.isActive = true;
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
         this.address = address;
         this.uuid = UUID.randomUUID();
+        this.role = UserRole.PATIENT;
+        this.isActive = true;
+        this.accountExpired = false;
+        this.accountLocked = false;
+        this.credentialsExpired = false;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    @Override
+    public String getPassword() {
+        return this.senha;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    @Override
+    public boolean isAccountNonExpired() {
+        return !this.accountExpired;
     }
 
-    public Patient() {}
-
-    public Long getId() {
-        return id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return !this.accountLocked;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return !this.credentialsExpired;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
-    public LocalDateTime getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }
-
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    @Override
+    public boolean isEnabled() {
+        return this.isActive;
     }
 }
