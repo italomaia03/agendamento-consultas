@@ -24,7 +24,7 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @PostMapping("/sing-in")
+    @PostMapping("/sign-in")
     @ResponseStatus(HttpStatus.CREATED)
     public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request){
         return patientService.createPatient(request);
