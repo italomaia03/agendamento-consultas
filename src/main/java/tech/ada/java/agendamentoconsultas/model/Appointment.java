@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@SQLRestriction("appointment_status = WAITING")
 public class Appointment {
 
     @Id
@@ -25,10 +27,16 @@ public class Appointment {
     private LocalTime appointmentStartTime;
     private LocalTime appointmentEndTime;
     private String appointmentDescription;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus appointmentStatus = AppointmentStatus.WAITING;
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+}
+
+enum AppointmentStatus {
+    WAITING, APPROVED, REJECTED
 }
