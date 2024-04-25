@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
@@ -54,7 +55,9 @@ public class PatientImpl implements PatientService{
             throw new CepNotFoundException(request.getAddressRequestDto().getCep());
         }
 
-        Patient patient = new Patient(request.getNome(), request.getEmail(), request.getSenha(), request.getTelefone(), request.getCpf(), address);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(request.getSenha());
+
+        Patient patient = new Patient(request.getNome(), request.getEmail(), encryptedPassword, request.getTelefone(), request.getCpf(), address);
         patientRepository.save(patient);
         
         return new PatientDtoResponse(request.getNome(), request.getEmail(), patient.getUuid());
@@ -76,7 +79,7 @@ public class PatientImpl implements PatientService{
     @Override
     public void deletePatient(UUID uuid) {
         Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(PatientNotFoundException::new);    
-        paciente.setActive(false);
+        paciente.setIsActive(false);
         paciente.setUpdateAt(LocalDateTime.now());
         patientRepository.save(paciente);
     }
