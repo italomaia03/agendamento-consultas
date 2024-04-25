@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentResponseDto;
+import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.service.AppointmentService;
 
 import java.time.LocalDate;
@@ -35,6 +36,11 @@ public class AppointmentController {
     @PostMapping("/patients/{patientUuid}/doctors/{doctorUuid}")
     public AppointmentResponseDto create(@RequestBody @Valid AppointmentRequestDto request, @PathVariable UUID doctorUuid, @PathVariable UUID patientUuid) {
         return appointmentService.create(request, doctorUuid, patientUuid);
+    }
+
+    @PutMapping("/patients/{patientUuid}/doctors/{doctorUuid}")
+    public void update(@RequestBody AppointmentUpdateRequestDto request, @PathVariable UUID patientUuid, @PathVariable UUID doctorUuid) {
+        appointmentService.update(request, patientUuid, doctorUuid);
     }
 
 }
