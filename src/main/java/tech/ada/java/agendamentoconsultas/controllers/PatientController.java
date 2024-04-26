@@ -35,4 +35,10 @@ public class PatientController {
     public void update(@RequestBody @Valid PatientUpdateRequestDto request, @PathVariable UUID uuid){
         patientService.update(request, uuid);
     }
+
+    @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePatient(@PathVariable UUID uuid){
+        patientService.deletePatient(uuid);
+    }
 }

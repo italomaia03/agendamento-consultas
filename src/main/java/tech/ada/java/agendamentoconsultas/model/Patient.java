@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@SQLRestriction("is_active = true")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
