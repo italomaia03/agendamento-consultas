@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,5 @@ public class AppointmentResponseDto implements Serializable {
     private String appointmentDescription;
     private DoctorAppointmentResponseDto doctor;
     private PatientAppointmentResponseDto patient;
+    private UUID uuid;
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -22,6 +23,8 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate appointmentDate;
+    @Column(updatable = false)
+    private UUID uuid = UUID.randomUUID();
     private LocalTime appointmentStartTime;
     private LocalTime appointmentEndTime;
     private String appointmentDescription;
