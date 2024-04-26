@@ -38,13 +38,13 @@ public class AppointmentController {
         return appointmentService.create(request, doctorUuid, patientUuid);
     }
 
-    @PutMapping("/patients/{patientUuid}/doctors/{doctorUuid}")
-    public void update(@RequestBody @Valid AppointmentRequestDto request, @PathVariable UUID patientUuid, @PathVariable UUID doctorUuid) {
-        appointmentService.update(request, patientUuid, doctorUuid);
+    @PutMapping("/doctors/{doctorUuid}/appointments/{appointmentUuid}")
+    public void updateDoctorAppointment(@RequestBody @Valid AppointmentRequestDto request, @PathVariable UUID doctorUuid, @PathVariable UUID appointmentUuid) {
+        appointmentService.update(request, doctorUuid, appointmentUuid);
     }
 
-    @DeleteMapping("/doctors/{doctorUuid}/patients/{patientUuid}")
-    public void update(@RequestBody @Valid AppointmentDeleteRequestDto request, @PathVariable UUID patientUuid, @PathVariable UUID doctorUuid) {
-        appointmentService.delete(request, patientUuid, doctorUuid);
+    @DeleteMapping("/doctors/{doctorUuid}/appointments/{appointmentUuid}")
+    public void update(@RequestBody @Valid AppointmentDeleteRequestDto request, @PathVariable UUID doctorUuid, @PathVariable UUID appointmentUuid) {
+        appointmentService.delete(request, doctorUuid, appointmentUuid);
     }
 }
