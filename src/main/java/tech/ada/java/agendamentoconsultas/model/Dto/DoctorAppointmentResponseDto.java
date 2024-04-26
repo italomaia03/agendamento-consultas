@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class DoctorDtoRequest {
+@NoArgsConstructor
+public class DoctorAppointmentResponseDto implements Serializable {
     private String name;
     private String crm;
     private String specialty;
-    private AddressRequestDto address;
 }

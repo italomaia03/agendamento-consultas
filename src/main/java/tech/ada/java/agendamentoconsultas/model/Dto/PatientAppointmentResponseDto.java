@@ -1,15 +1,15 @@
 package tech.ada.java.agendamentoconsultas.model.Dto;
 
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressRequestDto {
-    @Pattern(regexp = "^\\d{5}-?\\d{3}$")
-    private String cep;
-    private Integer numero;
+public class PatientAppointmentResponseDto implements Serializable {
+    private String nome;
+    private String telefone;
 }
