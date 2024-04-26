@@ -29,7 +29,7 @@ public class AgendamentoConsultasApplication {
     @Bean
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
-        final String apiTitle = "To-Do List API";
+        final String apiTitle = "Agendamentos Médicos API";
         return new OpenAPI()
             .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
             .components(
