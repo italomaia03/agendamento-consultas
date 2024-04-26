@@ -1,18 +1,16 @@
 package tech.ada.java.agendamentoconsultas.model.Dto;
 
-import java.io.Serializable;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tech.ada.java.agendamentoconsultas.exception.CpfNotValidException;
 import tech.ada.java.agendamentoconsultas.utils.DocumentUtils;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class PatientDtoRequest implements Serializable{
@@ -28,11 +26,19 @@ public class PatientDtoRequest implements Serializable{
     private String cpf;
     private AddressRequestDto addressRequestDto;
 
+    public PatientDtoRequest(String nome, String email, String senha, String telefone, String cpf, AddressRequestDto addressRequestDto) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.telefone = telefone;
+        this.setCpf(cpf);
+        this.addressRequestDto = addressRequestDto;
+    }
 
     public void setCpf(String cpf) {
         if(!DocumentUtils.cpfIsValid(cpf)){
             throw new CpfNotValidException();
         }
         this.cpf = cpf;
-    }    
+    }
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Address {
@@ -23,6 +24,7 @@ public class Address {
     private String cep;
     private String logradouro;
     private String complemento;
+    private Integer numero;
     private String bairro;
     private String localidade;
     private String uf;

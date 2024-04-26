@@ -3,34 +3,28 @@ package tech.ada.java.agendamentoconsultas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import tech.ada.java.agendamentoconsultas.model.enums.UserRole;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.SQLRestriction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import tech.ada.java.agendamentoconsultas.model.enums.UserRole;
-
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @SQLRestriction("is_active = true")
-@EqualsAndHashCode(of = "uuid")
 public class Patient implements UserDetails{
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,12 +44,12 @@ public class Patient implements UserDetails{
     private String cpf;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
-    
+
     private Boolean isActive;
     private Boolean accountExpired;
     private Boolean credentialsExpired;
     private Boolean accountLocked;
-    
+
     @ManyToOne
     @JoinColumn(name = "id_endereco")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
