@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppointmentUpdateRequestDto extends AppointmentRequestDto implements Serializable{
+public class AppointmentDeleteRequestDto implements Serializable{
     @NotNull
     private AppointmentStatus appointmentStatus;
 }
