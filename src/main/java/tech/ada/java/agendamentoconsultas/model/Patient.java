@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
+@SQLRestriction("is_active = true")
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

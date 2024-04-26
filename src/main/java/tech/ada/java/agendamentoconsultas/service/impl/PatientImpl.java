@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,7 +68,16 @@ public class PatientImpl implements PatientService{
         paciente.setTelefone(request.getTelefone());
         paciente.setNome(request.getNome());
         paciente.setEmail(request.getEmail());
+        paciente.setUpdateAt(LocalDateTime.now());
 
+        patientRepository.save(paciente);
+    }
+
+    @Override
+    public void deletePatient(UUID uuid) {
+        Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(PatientNotFoundException::new);    
+        paciente.setActive(false);
+        paciente.setUpdateAt(LocalDateTime.now());
         patientRepository.save(paciente);
     }
 }
