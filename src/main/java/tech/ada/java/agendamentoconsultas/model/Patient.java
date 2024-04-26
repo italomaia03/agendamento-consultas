@@ -3,12 +3,10 @@ package tech.ada.java.agendamentoconsultas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.Cascade;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Patient {
