@@ -70,9 +70,9 @@ public class Patient implements UserDetails{
         this.uuid = UUID.randomUUID();
         this.role = UserRole.PATIENT;
         this.isActive = true;
-        this.accountExpired = false;
-        this.accountLocked = false;
-        this.credentialsExpired = false;
+        this.accountExpired = !isActive;
+        this.accountLocked = !isActive;
+        this.credentialsExpired = !isActive;
     }
 
     @Override
