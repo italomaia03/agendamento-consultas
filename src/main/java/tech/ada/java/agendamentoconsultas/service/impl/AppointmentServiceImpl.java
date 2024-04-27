@@ -5,13 +5,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import tech.ada.java.agendamentoconsultas.exception.*;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
-import tech.ada.java.agendamentoconsultas.model.AppointmentStatus;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentDeleteRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentResponseDto;
 import tech.ada.java.agendamentoconsultas.model.Patient;
-import tech.ada.java.agendamentoconsultas.repository.AddressRepository;
+import tech.ada.java.agendamentoconsultas.model.enums.AppointmentStatus;
 import tech.ada.java.agendamentoconsultas.repository.AppointmentRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
@@ -29,7 +28,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
-    private final AddressRepository addressRepository;
 
     @Override
     public AppointmentResponseDto create(AppointmentRequestDto request, UUID doctorUuid, UUID patientUuid) {
@@ -46,8 +44,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponseDto> findAllByPatientUuid(UUID patientUuid) {
-        return appointmentRepository.findAllByPatientUuid(patientUuid).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
+    public List<AppointmentResponseDto> findAllByPatient(UUID patientUuid) {
+        Patient patient = patientRepository.findByUuid(patientUuid).orElseThrow(PatientNotFoundException::new);
+        return appointmentRepository.findAllByPatient(patient).stream().map(element -> modelMapper.map(element, AppointmentResponseDto.class)).toList();
     }
 
     @Override
