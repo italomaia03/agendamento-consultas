@@ -30,6 +30,7 @@ services:
 
     volumes:
       - "./infra/postgres:/data/postgres"
+      - "./infra/init:/docker-entrypoint-initdb.d"
     ports:
       - "63000:5432"
     networks:
