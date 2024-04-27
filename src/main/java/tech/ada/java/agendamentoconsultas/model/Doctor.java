@@ -34,9 +34,9 @@ public class Doctor implements UserDetails {
     private String specialty;
     private UUID uuid = UUID.randomUUID();
 
-    private Boolean accountExpired = false;
-    private Boolean credentialsExpired = false;
-    private Boolean accountLocked = false;
+    private Boolean accountExpired = !isActive;
+    private Boolean credentialsExpired = !isActive;
+    private Boolean accountLocked = !isActive;
 
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.DOCTOR;
@@ -59,7 +59,7 @@ public class Doctor implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return !this.accountExpired;
     }
 
     @Override
