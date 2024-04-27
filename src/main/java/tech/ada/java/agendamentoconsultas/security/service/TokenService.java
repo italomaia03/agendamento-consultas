@@ -1,53 +1,71 @@
 package tech.ada.java.agendamentoconsultas.security.service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
-import tech.ada.java.agendamentoconsultas.model.Patient;
+import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.function.Function;
 
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
+    @Value("${jwt.secret}")
     private String secret;
 
-    public String generatedToken(Patient patient){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                .withIssuer("patient_auth")
-                .withSubject(patient.getEmail())
-                .withExpiresAt(generatedExpirationDate())
-                .sign(algorithm);
-            return token;
-        } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro na criação do token");
-        }
+    public String generatedToken(UserDetails userDetails) {
+        LocalDateTime now = LocalDateTime.now();
+        return Jwts.builder()
+                .claims(new HashMap<>())
+                .subject(userDetails.getUsername())
+                .expiration(convertFromLocalDateTime(now.plusHours(1L)))
+                .signWith(getSignKey())
+                .compact();
     }
 
-    public String validateToken(String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                .withIssuer("patient_auth")
+    private SecretKey getSignKey(){
+        return Keys.hmacShaKeyFor(Base64.getEncoder().encode(secret.getBytes()));
+    }
+
+    public String extractUsername(String token) {
+        return this.extractClaims(token, Claims::getSubject);
+    }
+
+    private Date convertFromLocalDateTime(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    private <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        final var claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSignKey())
                 .build()
-                .verify(token)
-                .getSubject();
-        } catch (JWTVerificationException e) {
-            return "";
-        }
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
-    private Instant generatedExpirationDate(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    private Date extractExpiration(String token) {
+        return extractClaims(token, Claims::getExpiration);
+    }
+
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
+        final var username = extractUsername(token);
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 }
