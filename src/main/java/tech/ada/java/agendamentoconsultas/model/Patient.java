@@ -55,6 +55,7 @@ public class Patient implements UserDetails{
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Address address;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     public Patient(String nome, String email, String senha, String telefone, String cpf, Address address) {
