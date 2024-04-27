@@ -15,7 +15,7 @@ import tech.ada.java.agendamentoconsultas.service.PatientService;
 
 
 @RestController
-@RequestMapping("/api/v1/patient")
+@RequestMapping("/api/v1/patients")
 public class PatientController {
 
     private final PatientService patientService;
