@@ -14,9 +14,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tech.ada.java.agendamentoconsultas.repository.TokenRepository;
 import tech.ada.java.agendamentoconsultas.security.service.TokenService;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 @Log4j2
 @Component
@@ -25,6 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -35,6 +38,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             return;
         }
         final String token = authHeader.substring(7);
+        if(isTokenInBlackList(token)) {
+           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+           return;
+        }
         authenticateUserFromToken(request, token);
         filterChain.doFilter(request, response);
     }
@@ -47,6 +54,13 @@ public class SecurityFilter extends OncePerRequestFilter {
                 setAuthTokenOnSecurityContext(request, userDetails);
             }
         }
+    }
+
+    private Boolean isTokenInBlackList(String token) {
+        String username = tokenService.extractUsername(token);
+        var expiration = tokenService.extractExpiration(token).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        String key = username + "-" + expiration;
+        return tokenRepository.findByKey(key).isPresent();
     }
 
     private void setAuthTokenOnSecurityContext(HttpServletRequest request, UserDetails userDetails) {
