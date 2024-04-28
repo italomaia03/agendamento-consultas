@@ -1,19 +1,17 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import tech.ada.java.agendamentoconsultas.model.Dto.LoginRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.LoginResponseDto;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
 import tech.ada.java.agendamentoconsultas.service.AuthService;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import tech.ada.java.agendamentoconsultas.service.PatientService;
 
 
 @RestController
@@ -22,16 +20,24 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class AuthController {
 
     private final AuthService authService;
+    private final PatientService patientService;
+
+
+    @PostMapping("/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request){
+        return patientService.createPatient(request);
+    }
 
     @PostMapping("/login")
     public LoginResponseDto login(@RequestBody @Valid LoginRequestDto request) {
         return authService.login(request);
     }
-    
-    // @PostMapping("/logout")
-    // @ResponseStatus(HttpStatus.NO_CONTENT)
-    // public void logout() {
-    //     this.authService.logout();
-    // }
-    
+
+    @GetMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout() {
+
+    }
+
 }
