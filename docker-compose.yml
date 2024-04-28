@@ -30,16 +30,33 @@ services:
 
     volumes:
       - "./infra/postgres:/data/postgres"
+      - "./infra/init:/docker-entrypoint-initdb.d"
     ports:
       - "63000:5432"
     networks:
       - postgres
     restart: unless-stopped
 
+  redis:
+    container_name: agendamento-token-control
+    image: redis:7.2.4-alpine
+    restart: unless-stopped
+    ports:
+      - "63001:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - "./infra/cache:/data"
+    networks:
+      - redis
+
+
 networks:
   postgres:
+    driver: bridge
+  redis:
     driver: bridge
 volumes:
   init:
   data:
+  cache:
 

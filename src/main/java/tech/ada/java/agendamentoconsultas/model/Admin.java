@@ -1,12 +1,8 @@
 package tech.ada.java.agendamentoconsultas.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,41 +12,31 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@SQLRestriction("is_active = true")
-public class Doctor implements UserDetails {
+@Entity
+@Table(name = "admin")
+public class Admin implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    private String crm;
     private String email;
     private String password;
     private Boolean isActive = true;
-    private String specialty;
-    private UUID uuid = UUID.randomUUID();
-
+    private UUID uuid;
     private Boolean accountExpired = !isActive;
     private Boolean credentialsExpired = !isActive;
     private Boolean accountLocked = !isActive;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.DOCTOR;
-
-    @ManyToOne
-    @JoinColumn(name = "address_id")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    private Address address;
+    private UserRole role = UserRole.ADMIN;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()), new SimpleGrantedAuthority("ROLE_" + UserRole.DOCTOR.name()), new SimpleGrantedAuthority("ROLE_" + UserRole.PATIENT.name()));
     }
-
 
     @Override
     public String getUsername() {

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
+import tech.ada.java.agendamentoconsultas.model.enums.AppointmentStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

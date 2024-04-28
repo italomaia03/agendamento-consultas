@@ -1,25 +1,24 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
-import tech.ada.java.agendamentoconsultas.model.Patient;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
+import tech.ada.java.agendamentoconsultas.model.Patient;
 import tech.ada.java.agendamentoconsultas.repository.AddressRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
 import tech.ada.java.agendamentoconsultas.service.ViaCepService;
 import tech.ada.java.agendamentoconsultas.utils.CepUtils;
-import tech.ada.java.agendamentoconsultas.utils.DocumentUtils;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PatientImpl implements PatientService{
@@ -54,7 +53,9 @@ public class PatientImpl implements PatientService{
             throw new CepNotFoundException(request.getAddressRequestDto().getCep());
         }
 
-        Patient patient = new Patient(request.getNome(), request.getEmail(), request.getSenha(), request.getTelefone(), request.getCpf(), address);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(request.getSenha());
+
+        Patient patient = new Patient(request.getNome(), request.getEmail(), encryptedPassword, request.getTelefone(), request.getCpf(), address);
         patientRepository.save(patient);
         
         return new PatientDtoResponse(request.getNome(), request.getEmail(), patient.getUuid());
@@ -76,7 +77,7 @@ public class PatientImpl implements PatientService{
     @Override
     public void deletePatient(UUID uuid) {
         Patient paciente = patientRepository.findByUuid(uuid).orElseThrow(PatientNotFoundException::new);    
-        paciente.setActive(false);
+        paciente.setIsActive(false);
         paciente.setUpdateAt(LocalDateTime.now());
         patientRepository.save(paciente);
     }

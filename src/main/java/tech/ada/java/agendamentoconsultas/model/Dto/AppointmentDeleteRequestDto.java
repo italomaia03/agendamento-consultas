@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.ada.java.agendamentoconsultas.model.AppointmentStatus;
+import tech.ada.java.agendamentoconsultas.model.enums.AppointmentStatus;
 
 import java.io.Serializable;
 

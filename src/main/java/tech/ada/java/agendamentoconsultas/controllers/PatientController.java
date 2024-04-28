@@ -1,21 +1,17 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
-
-
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
-import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
 
+import java.util.UUID;
+
 
 @RestController
-@RequestMapping("/api/v1/patient")
+@RequestMapping("/api/v1/patients")
 public class PatientController {
 
     private final PatientService patientService;
@@ -24,20 +20,16 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @PostMapping("/sing-in")
-    @ResponseStatus(HttpStatus.CREATED)
-    public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request){
-        return patientService.createPatient(request);
-    }
-
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     public void update(@RequestBody @Valid PatientUpdateRequestDto request, @PathVariable UUID uuid){
         patientService.update(request, uuid);
     }
 
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     public void deletePatient(@PathVariable UUID uuid){
         patientService.deletePatient(uuid);
     }

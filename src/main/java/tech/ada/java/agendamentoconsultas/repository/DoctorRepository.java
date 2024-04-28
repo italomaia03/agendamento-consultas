@@ -14,6 +14,8 @@ import java.util.UUID;
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     Optional<Doctor> findByUuid(UUID uuid);
 
+    Optional<Doctor> findByEmail(String username);
+
     @Modifying
     @Query("update Doctor set isActive = false where uuid = :uuid")
     void deleteByUuid(@Param("uuid")UUID uuid);
