@@ -31,8 +31,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/patients/sign-in").permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/api/v1/auth/**", HttpMethod.POST.name())).permitAll()
                 .requestMatchers("/api/v1/patients/**").hasRole("PATIENT")
                 .requestMatchers("/api/v1/doctors/**").hasRole("DOCTOR")
                 .anyRequest().authenticated()
