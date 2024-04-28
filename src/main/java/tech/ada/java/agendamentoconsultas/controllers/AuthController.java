@@ -1,16 +1,17 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
-import org.springframework.web.bind.annotation.*;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.model.Dto.LoginRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.LoginResponseDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoRequest;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
 import tech.ada.java.agendamentoconsultas.service.AuthService;
-
-import org.springframework.http.HttpStatus;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
 
 
@@ -36,8 +37,8 @@ public class AuthController {
 
     @GetMapping("/logout")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout() {
-
+    public void logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(authentication, request, response);
     }
 
 }
