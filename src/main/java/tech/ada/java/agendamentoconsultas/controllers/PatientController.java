@@ -2,6 +2,7 @@ package tech.ada.java.agendamentoconsultas.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
@@ -21,12 +22,14 @@ public class PatientController {
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     public void update(@RequestBody @Valid PatientUpdateRequestDto request, @PathVariable UUID uuid){
         patientService.update(request, uuid);
     }
 
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     public void deletePatient(@PathVariable UUID uuid){
         patientService.deletePatient(uuid);
     }

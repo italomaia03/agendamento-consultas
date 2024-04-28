@@ -21,13 +21,13 @@ public class DoctorController {
     private final DoctorService service;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole(hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).ADMIN.name())," +
-            "hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name()))")
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     public List<DoctorDtoResponse> findAll(){
         return this.service.findALl();
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).DOCTOR.name())")
     public DoctorDtoResponse findByUuid(@PathVariable UUID uuid){
         return service.findByUuid(uuid);
     }
@@ -41,6 +41,7 @@ public class DoctorController {
 
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).DOCTOR.name())")
     public void update(@PathVariable UUID uuid, @Valid @RequestBody DoctorDtoRequest dto){
         service.update(uuid,dto);
     }
