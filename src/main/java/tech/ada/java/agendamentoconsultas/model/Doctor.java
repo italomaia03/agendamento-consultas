@@ -22,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SQLRestriction("is_active = true")
-public class Doctor implements UserDetails {
+public class Doctor implements UserDetails, AuthenticatedUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

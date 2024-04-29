@@ -23,7 +23,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @SQLRestriction("is_active = true")
-public class Patient implements UserDetails{
+public class Patient implements UserDetails, AuthenticatedUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
