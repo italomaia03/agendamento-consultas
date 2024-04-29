@@ -14,11 +14,15 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/agendamentos"
       SPRING_DATASOURCE_USERNAME: "admin"
       SPRING_DATASOURCE_PASSWORD: "admin"
-      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "none"
+      SPRING_DATA_REDIS_HOST: "redis"
+      SPRING_DATA_REDIS_PORT: "6379"
+      JWT_SECRET: "412466c6f4b1dd5debad939b9b18dac6b323222bc0283473596997979f6bc207"
     ports:
       - "8080:8080"
     networks:
       - postgres
+      - redis
 
   db:
     container_name: agendamento-db
