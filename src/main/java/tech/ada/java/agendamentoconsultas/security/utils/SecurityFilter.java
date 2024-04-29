@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.security.utils;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tech.ada.java.agendamentoconsultas.exception.ErrorResponse;
 import tech.ada.java.agendamentoconsultas.repository.TokenRepository;
 import tech.ada.java.agendamentoconsultas.security.service.TokenService;
 
@@ -37,13 +41,18 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final String token = authHeader.substring(7);
-        if(isTokenInBlackList(token)) {
-           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-           return;
+        try {
+            final String token = authHeader.substring(7);
+            if(isTokenInBlackList(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            authenticateUserFromToken(request, token);
+            filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        authenticateUserFromToken(request, token);
-        filterChain.doFilter(request, response);
     }
 
     private void authenticateUserFromToken(HttpServletRequest request, String token) {
