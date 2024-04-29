@@ -34,12 +34,6 @@ public class RestControllerAdvice {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(value = ExpiredJwtException.class)
-    public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
-        final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.UNAUTHORIZED, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
-    }
-
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
