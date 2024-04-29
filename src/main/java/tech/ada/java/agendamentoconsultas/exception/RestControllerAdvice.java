@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,6 +32,12 @@ public class RestControllerAdvice {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.FORBIDDEN, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
+        final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = Exception.class)
