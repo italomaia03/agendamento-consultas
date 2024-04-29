@@ -26,6 +26,7 @@ public class AppointmentController {
 
     @GetMapping ("/patients/{patientUuid}/appointments")
     @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
+    @ValidateUserPermission
     public List<AppointmentResponseDto> findAllByPatientUuid(@PathVariable UUID patientUuid) {
         return appointmentService.findAllByPatient(patientUuid);
     }
