@@ -1,6 +1,5 @@
 package tech.ada.java.agendamentoconsultas.exception;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,14 +34,12 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
 
-    //@formatter:off
     private String getErrorMessages(BindingResult bindingResult) {
         return Stream.concat(
                 bindingResult.getFieldErrors().stream().map(this::getMethodArgumentNotValidErrorMessage),
                 bindingResult.getGlobalErrors().stream().map(this::getMethodArgumentNotValidErrorMessage)
         ).collect(Collectors.joining(", "));
     }
-    //@formatter:on
 
     private String getMethodArgumentNotValidErrorMessage(FieldError error) {
         return String.format(METHOD_ARGUMENT_NOT_VALID_ERROR_MESSAGE, error.getField(), error.getDefaultMessage());
@@ -88,5 +85,4 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
