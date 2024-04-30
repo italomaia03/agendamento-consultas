@@ -1,10 +1,12 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import tech.ada.java.agendamentoconsultas.annotation.ValidateUserPermission;
 import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoRequest;
 import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoResponse;
 import tech.ada.java.agendamentoconsultas.service.DoctorService;
@@ -15,7 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/doctors")
 @RequiredArgsConstructor
-
+@Tag(name = "Médico")
 public class DoctorController {
 
     private final DoctorService service;
@@ -28,6 +30,7 @@ public class DoctorController {
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).DOCTOR.name())")
+    @ValidateUserPermission
     public DoctorDtoResponse findByUuid(@PathVariable UUID uuid){
         return service.findByUuid(uuid);
     }
@@ -42,6 +45,7 @@ public class DoctorController {
     @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).DOCTOR.name())")
+    @ValidateUserPermission
     public void update(@PathVariable UUID uuid, @Valid @RequestBody DoctorDtoRequest dto){
         service.update(uuid,dto);
     }
@@ -49,6 +53,7 @@ public class DoctorController {
     @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).ADMIN.name())")
+    @ValidateUserPermission
     public void delete(@PathVariable UUID uuid){
         service.delete(uuid);
     }

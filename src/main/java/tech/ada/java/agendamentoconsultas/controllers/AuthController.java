@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,15 +19,15 @@ import tech.ada.java.agendamentoconsultas.service.PatientService;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Autenticação")
 public class AuthController {
 
     private final AuthService authService;
     private final PatientService patientService;
 
-
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request){
+    public PatientDtoResponse createPatient(@RequestBody @Valid PatientDtoRequest request) {
         return patientService.createPatient(request);
     }
 
