@@ -139,4 +139,28 @@ public class DoctorServiceImplUnitTest {
 
         Assertions.assertThrows(DoctorNotFoundException.class, () -> sut.findByUuid(uuid));
     }
+
+    @Test
+    public void updateDoctor_WithValidParameters_shouldBeSuccess() {
+
+        UUID uuid = UUID.randomUUID();
+
+        doctor.setUuid(uuid);
+
+        doctor.setPassword("password");
+
+        Mockito.when(addressRepository
+                        .findByCepAndNumero(doctorDtoRequest.getAddress().getCep(),doctorDtoRequest.getAddress().getNumero()))
+                .thenReturn(Optional.of(addressFromDb));
+
+        Mockito.when(repository.findByUuid(uuid)).thenReturn(Optional.of(doctor));
+
+        Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
+                .thenReturn(doctor);
+
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn("teste");
+
+        sut.update(uuid, doctorDtoRequest);
+    }
+
 }
