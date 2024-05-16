@@ -163,4 +163,15 @@ public class DoctorServiceImplUnitTest {
         sut.update(uuid, doctorDtoRequest);
     }
 
+    @Test
+    public void updateDoctor_WithInvalidUuid_shouldBeFail() {
+        UUID uuid = UUID.randomUUID();
+
+        Mockito.when(repository.findByUuid(uuid)).thenThrow(DoctorNotFoundException.class);
+
+        Assertions.assertThrows(DoctorNotFoundException.class, () -> sut.update(uuid, doctorDtoRequest));
+
+        Mockito.verify(repository,Mockito.never()).save(Mockito.any(Doctor.class));
+    }
+
 }
