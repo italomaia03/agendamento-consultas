@@ -174,4 +174,13 @@ public class DoctorServiceImplUnitTest {
         Mockito.verify(repository,Mockito.never()).save(Mockito.any(Doctor.class));
     }
 
+    @Test
+    public void deleteDoctor_WithValidParameters_shouldBeSuccess() {
+        UUID uuid = UUID.randomUUID();
+        doctor.setUuid(uuid);
+
+        Mockito.when(repository.existsByUuid(uuid)).thenReturn(true);
+
+        sut.delete(uuid);
+    }
 }
