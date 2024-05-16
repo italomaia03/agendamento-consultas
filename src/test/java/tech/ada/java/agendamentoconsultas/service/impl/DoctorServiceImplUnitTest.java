@@ -16,10 +16,13 @@ import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoRequest;
+import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoResponse;
 import tech.ada.java.agendamentoconsultas.repository.AddressRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.service.ViaCepService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,8 +56,7 @@ public class DoctorServiceImplUnitTest {
         doctor = new Doctor();
         doctorDtoRequest = new DoctorDtoRequest();
         doctorDtoRequest.setAddress(addressRequestDto);
-        Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
-                .thenReturn(doctor);
+
     }
 
     @Test
@@ -62,6 +64,9 @@ public class DoctorServiceImplUnitTest {
         Mockito.when(addressRepository
                 .findByCepAndNumero(doctorDtoRequest.getAddress().getCep(),doctorDtoRequest.getAddress().getNumero()))
                 .thenReturn(Optional.of(addressFromDb));
+
+        Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
+                .thenReturn(doctor);
 
         sut.addDoctor(doctorDtoRequest);
         Mockito.verify(addressRepository, Mockito.times(1))
@@ -75,6 +80,9 @@ public class DoctorServiceImplUnitTest {
                         .findAddressByCep(doctorDtoRequest.getAddress().getCep()))
                 .thenReturn(addressDto);
 
+        Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
+                .thenReturn(doctor);
+
         sut.addDoctor(doctorDtoRequest);
         Mockito.verify(viaCepService, Mockito.times(1)).findAddressByCep(Mockito.anyString());
     }
@@ -84,8 +92,20 @@ public class DoctorServiceImplUnitTest {
         addressRequestDto.setCep("invalid");
         Mockito.when(viaCepService.findAddressByCep(Mockito.anyString())).thenThrow(new InvalidCepException());
 
+        Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
+                .thenReturn(doctor);
+
         Assertions.assertThrows(InvalidCepException.class, () -> sut.addDoctor(doctorDtoRequest));
 
         Mockito.verify(viaCepService, Mockito.times(1)).findAddressByCep(Mockito.anyString());
+    }
+
+    @Test
+    public void findAllDoctors_shouldBeSuccess() {
+        Mockito.when(repository.findAll()).thenReturn(List.of(doctor));
+
+        List<DoctorDtoResponse> results = sut.findALl();
+
+        Assertions.assertEquals(1, results.size());
     }
 }
