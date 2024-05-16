@@ -24,6 +24,7 @@ import tech.ada.java.agendamentoconsultas.service.ViaCepService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class DoctorServiceImplUnitTest {
@@ -107,5 +108,25 @@ public class DoctorServiceImplUnitTest {
         List<DoctorDtoResponse> results = sut.findALl();
 
         Assertions.assertEquals(1, results.size());
+    }
+
+    @Test
+    public void findDoctorByUuId_WithValidUuid_shouldBeSuccess() {
+        UUID uuid = UUID.randomUUID();
+
+        doctor.setUuid(uuid);
+
+        DoctorDtoResponse doctorDtoResponse = new DoctorDtoResponse();
+
+        doctorDtoResponse.setUuid(uuid);
+
+        Mockito.when(repository.findByUuid(uuid)).thenReturn(Optional.of(doctor));
+
+        Mockito.when(modelMapper.map(doctor, DoctorDtoResponse.class))
+                .thenReturn(doctorDtoResponse);
+
+        DoctorDtoResponse results = sut.findByUuid(uuid);
+
+        Assertions.assertEquals(uuid, results.getUuid());
     }
 }
