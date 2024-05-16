@@ -183,4 +183,15 @@ public class DoctorServiceImplUnitTest {
 
         sut.delete(uuid);
     }
+
+    @Test
+    public void deleteDoctor_WithInvalidUuid_shouldBeFail() {
+        UUID uuid = UUID.randomUUID();
+
+        Mockito.when(repository.existsByUuid(uuid)).thenReturn(false);
+
+        Assertions.assertThrows(DoctorNotFoundException.class, () -> sut.delete(uuid));
+
+        Mockito.verify(repository,Mockito.never()).deleteByUuid(Mockito.any());
+    }
 }
