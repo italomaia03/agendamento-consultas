@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.InvalidCepException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
@@ -128,5 +129,14 @@ public class DoctorServiceImplUnitTest {
         DoctorDtoResponse results = sut.findByUuid(uuid);
 
         Assertions.assertEquals(uuid, results.getUuid());
+    }
+
+    @Test
+    public void findDoctorByUuId_WithInvalidUuid_shouldBeFail() {
+        UUID uuid = UUID.randomUUID();
+
+        Mockito.when(repository.findByUuid(uuid)).thenThrow(DoctorNotFoundException.class);
+
+        Assertions.assertThrows(DoctorNotFoundException.class, () -> sut.findByUuid(uuid));
     }
 }
