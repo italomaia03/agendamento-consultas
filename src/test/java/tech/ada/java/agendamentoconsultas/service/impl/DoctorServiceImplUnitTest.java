@@ -23,7 +23,7 @@ import tech.ada.java.agendamentoconsultas.service.ViaCepService;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class DoctorServiceImplCreateDoctorUnitTest {
+public class DoctorServiceImplUnitTest {
     @Mock
     private DoctorRepository repository;
     @Mock
