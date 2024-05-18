@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  redis:
+    container_name: agendamento-token-control
+    image: redis:7.2.4-alpine
+    restart: unless-stopped
+    ports:
+      - "63003:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    networks:
+      - redis
+
+  wiremock:
+    image: "wiremock/wiremock:latest"
+    container_name: my_wiremock
+    ports:
+      - "2345:8080"
+    volumes:
+      - ./stubs/mappings:/home/wiremock/mappings
+    entrypoint: [ "/docker-entrypoint.sh", "--global-response-templating", "--verbose" ]
+
+networks:
+  redis:
+    driver: bridge
