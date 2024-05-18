@@ -1,5 +1,8 @@
 package tech.ada.java.agendamentoconsultas.model.Dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorDtoRequest {
+    @NotBlank
+    @Pattern(regexp = "^[\\p{L}]+$", message = "O nome deve conter apenas caracteres alfabéticos.")
     private String name;
+    @NotBlank
+    @Email(message = "Coloque um email em um formato válido(ex: usuario@dominio.com")
     private String email;
+    @NotBlank
+    @Pattern(regexp = "^\\(?(\\d{2})\\)?\\s?(\\d{4,5})-?(\\d{4})$", message = "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.")
     private String password;
+    @NotBlank
     private String crm;
     private String specialty;
     private AddressRequestDto address;
