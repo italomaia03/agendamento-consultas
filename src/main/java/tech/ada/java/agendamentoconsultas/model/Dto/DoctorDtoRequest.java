@@ -18,7 +18,8 @@ public class DoctorDtoRequest {
     @Email(message = "Coloque um email em um formato válido(ex: usuario@dominio.com")
     private String email;
     @NotBlank
-    @Pattern(regexp = "^\\(?(\\d{2})\\)?\\s?(\\d{4,5})-?(\\d{4})$", message = "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[_*#@]).{8,32}$",
+            message = "A senha deve conter de 8 a 20 caracteres (lowercase, uppercase, numbers, special(_,*,#,@))")
     private String password;
     @NotBlank
     private String crm;
