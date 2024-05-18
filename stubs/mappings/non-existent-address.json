@@ -1,0 +1,15 @@
+{
+  "request": {
+    "url": "/6300000/json",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "erro": true
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
