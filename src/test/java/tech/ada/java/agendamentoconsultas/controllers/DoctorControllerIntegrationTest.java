@@ -56,19 +56,7 @@ public class DoctorControllerIntegrationTest {
     public void create_doctorWithoutCredentials_shouldThrowException() throws Exception {
         mvc.perform(
                 MockMvcRequestBuilders.post("/api/v1/doctors")
-                        .content("""
-                                {
-                                    "name": "Test"
-                                    "email": "test@test.com",
-                                    "password": "test",
-                                    "crm": "1234-CE",
-                                    "specialty": "cardiologista",
-                                    "address": {
-                                        "cep": "1234567-32",
-                                        "numero": 123
-                                    }
-                                }
-                                """)
+                        .content("")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
         )
@@ -85,7 +73,7 @@ public class DoctorControllerIntegrationTest {
                                 {
                                     "name": "Test",
                                     "email": "test@test.com",
-                                    "password": "test",
+                                    "password": "senha_Dificil123",
                                     "crm": "1234-CE",
                                     "specialty": "cardiologista",
                                     "address": {
