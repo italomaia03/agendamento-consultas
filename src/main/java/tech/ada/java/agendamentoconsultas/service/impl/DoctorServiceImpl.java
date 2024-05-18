@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
+import tech.ada.java.agendamentoconsultas.exception.InvalidCepException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressDto;
@@ -56,10 +57,14 @@ public class DoctorServiceImpl implements DoctorService {
         if (address.isPresent()) {
             doctor.setAddress(address.get());
         } else {
-            AddressDto addressDto = viaCepService.findAddressByCep(dto.getAddress().getCep());
-            formatAddressDto(dto.getAddress().getNumero(), addressDto);
-            Address addressEntity = modelMapper.map(addressDto, Address.class);
-            doctor.setAddress(addressEntity);
+            try {
+                AddressDto addressDto = viaCepService.findAddressByCep(dto.getAddress().getCep());
+                formatAddressDto(dto.getAddress().getNumero(), addressDto);
+                Address addressEntity = modelMapper.map(addressDto, Address.class);
+                doctor.setAddress(addressEntity);
+            } catch (RuntimeException e) {
+                throw new InvalidCepException();
+            }
         }
     }
 

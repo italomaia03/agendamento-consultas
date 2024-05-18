@@ -3,6 +3,7 @@ package tech.ada.java.agendamentoconsultas.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
@@ -19,6 +20,7 @@ import tech.ada.java.agendamentoconsultas.utils.CepUtils;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Service
 public class PatientImpl implements PatientService{
@@ -38,21 +40,10 @@ public class PatientImpl implements PatientService{
     @Override
     public PatientDtoResponse createPatient(PatientDtoRequest request) {
         
-        Optional<Address> optionalAddress = addressRepository.findByCep(CepUtils.removeNotNumberCharToCep(request.getAddressRequestDto().getCep()));
-        Address address = new Address();
-
-        try {
-            if(optionalAddress.isPresent()){
-                address = optionalAddress.get();
-            }else{
-                address = modelMapper.map(viaCepService.findAddressByCep(request.getAddressRequestDto().getCep()), Address.class);
-                address.setCep(CepUtils.removeNotNumberCharToCep(address.getCep()));
-                addressRepository.save(address);
-            }
-        } catch (RuntimeException e) {
-            throw new CepNotFoundException(request.getAddressRequestDto().getCep());
-        }
-
+        Address address = addressRepository.findByCep(CepUtils.removeNotNumberCharToCep(request.getAddressRequestDto().getCep())).orElseGet(
+            saveNewAddress(request.getAddressRequestDto().getCep())
+        );
+            
         String encryptedPassword = new BCryptPasswordEncoder().encode(request.getSenha());
 
         Patient patient = new Patient(request.getNome(), request.getEmail(), encryptedPassword, request.getTelefone(), request.getCpf(), address);
@@ -80,5 +71,18 @@ public class PatientImpl implements PatientService{
         paciente.setIsActive(false);
         paciente.setUpdateAt(LocalDateTime.now());
         patientRepository.save(paciente);
+    }
+
+    private Supplier<Address> saveNewAddress(String cep){
+        return () -> {
+            try {
+                Address viaCepAddress = modelMapper.map(viaCepService.findAddressByCep(cep), Address.class);
+                viaCepAddress.setCep(CepUtils.removeNotNumberCharToCep(viaCepAddress.getCep()));
+                addressRepository.save(viaCepAddress); 
+                return viaCepAddress;
+            } catch (Exception e) {
+                throw new CepNotFoundException(cep);
+            }
+        };
     }
 }
