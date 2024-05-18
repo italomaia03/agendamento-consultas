@@ -17,7 +17,6 @@ import tech.ada.java.agendamentoconsultas.model.Patient;
 import tech.ada.java.agendamentoconsultas.repository.AppointmentRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
-import tech.ada.java.agendamentoconsultas.service.AppointmentServiceImpl;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
