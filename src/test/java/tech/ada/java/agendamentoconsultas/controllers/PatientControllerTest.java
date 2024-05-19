@@ -60,7 +60,6 @@ public class PatientControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                 )
-                // .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -69,7 +68,6 @@ public class PatientControllerTest {
                 .getAsJsonObject()
                 .getAsJsonObject()
                 .get("token").getAsString();
-        // System.out.println("Esse é o token: "+token);
     }
 
     @Test
