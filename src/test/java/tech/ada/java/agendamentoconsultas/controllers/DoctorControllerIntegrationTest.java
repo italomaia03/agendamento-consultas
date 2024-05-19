@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,9 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import util.IntegrationTestsExtension;
+import utils.RedisProperties;
+import utils.TestRedisConfiguration;
 
-@SpringBootTest
+@SpringBootTest(classes = TestRedisConfiguration.class)
 @ExtendWith(IntegrationTestsExtension.class)
+@Import(RedisProperties.class)
 public class DoctorControllerIntegrationTest {
     private MockMvc mvc;
 
@@ -88,4 +92,28 @@ public class DoctorControllerIntegrationTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
+    @Test
+    public void findAll_userWithCredentials_shouldSucceed() throws Exception {
+        mvc.perform(
+                MockMvcRequestBuilders.get("/api/v1/doctors")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void findAll_userWithoutCredentials_shouldFail() throws Exception {
+        mvc.perform(
+                MockMvcRequestBuilders.get("/api/v1/doctors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
 }
