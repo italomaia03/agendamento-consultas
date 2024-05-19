@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
-import tech.ada.java.agendamentoconsultas.exception.InvalidCepException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressDto;
@@ -63,7 +63,7 @@ public class DoctorServiceImpl implements DoctorService {
                 Address addressEntity = modelMapper.map(addressDto, Address.class);
                 doctor.setAddress(addressEntity);
             } catch (RuntimeException e) {
-                throw new InvalidCepException();
+                throw new CepNotFoundException(dto.getAddress().getCep());
             }
         }
     }
