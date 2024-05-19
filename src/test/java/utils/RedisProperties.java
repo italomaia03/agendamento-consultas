@@ -5,15 +5,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RedisProperties {
-    private int redisPort;
-    private String redisHost;
 
-    public RedisProperties(
-      @Value("${spring.data.redis.port}") int redisPort, 
-      @Value("${spring.data.redis.host}") String redisHost) {
-        this.redisPort = redisPort;
-        this.redisHost = redisHost;
-    }
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
 
     public int getRedisPort() {
         return redisPort;
