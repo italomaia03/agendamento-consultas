@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.CpfNotValidException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Address;
@@ -69,6 +70,8 @@ public class PatientImplUnitTest {
         address.setCep("51250-150");
 
         Mockito.when(addressRepository.findByCep(CepUtils.removeNotNumberCharToCep("51250-150"))).thenReturn(Optional.of(address));
+        Mockito.when(addressRepository.findByCep(CepUtils.removeNotNumberCharToCep("12345-678"))).thenReturn(Optional.empty());
+        Mockito.when(viaCepService.findAddressByCep("12345-678")).thenThrow(new CepNotFoundException("12345-678"));
 
         Mockito.when(patientRepository.findByUuid(UUID.fromString("5cc7b9da-0360-472b-b665-bf865862f286"))).thenReturn(Optional.of(patient));
         Mockito.when(patientRepository.findByUuid(UUID.fromString("5cc7b9da-0360-472b-b665-bf865862f281"))).thenReturn(Optional.empty());
@@ -86,6 +89,15 @@ public class PatientImplUnitTest {
         Assertions.assertThrows(CpfNotValidException.class, () -> {
             patientDto.setCpf(invalidCpf);
         });
+        Mockito.verify(patientRepository, Mockito.never()).save(any(Patient.class));
+    }
+
+    @Test
+    public void create_patient_cepNotFoundShouldNotSave() {
+        patientDto.getAddressRequestDto().setCep("12345-678");
+        Assertions.assertThrows(CepNotFoundException.class
+        , () -> patientService.createPatient(patientDto));
+        Mockito.verify(patientRepository, Mockito.never()).save(any(Patient.class));
     }
 
     @Test
