@@ -10,8 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import tech.ada.java.agendamentoconsultas.exception.CepNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
-import tech.ada.java.agendamentoconsultas.exception.InvalidCepException;
 import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressDto;
@@ -22,7 +22,6 @@ import tech.ada.java.agendamentoconsultas.repository.AddressRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.service.ViaCepService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -92,12 +91,12 @@ public class DoctorServiceImplUnitTest {
     @Test
     public void createDoctor_withInvalidAddressFromExtApi_mustFail() {
         addressRequestDto.setCep("invalid");
-        Mockito.when(viaCepService.findAddressByCep(Mockito.anyString())).thenThrow(new InvalidCepException());
+        Mockito.when(viaCepService.findAddressByCep(Mockito.anyString())).thenThrow(new CepNotFoundException(addressRequestDto.getCep()));
 
         Mockito.when(modelMapper.map(doctorDtoRequest, Doctor.class))
                 .thenReturn(doctor);
 
-        Assertions.assertThrows(InvalidCepException.class, () -> sut.addDoctor(doctorDtoRequest));
+        Assertions.assertThrows(CepNotFoundException.class, () -> sut.addDoctor(doctorDtoRequest));
 
         Mockito.verify(viaCepService, Mockito.times(1)).findAddressByCep(Mockito.anyString());
     }
