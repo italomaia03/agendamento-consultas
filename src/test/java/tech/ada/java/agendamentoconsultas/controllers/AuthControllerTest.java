@@ -1,4 +1,4 @@
-package tech.ada.java.agendamentoconsultas.integration.controllers;
+package tech.ada.java.agendamentoconsultas.controllers;
 
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
