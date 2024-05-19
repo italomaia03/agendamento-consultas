@@ -7,6 +7,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.ada.java.agendamentoconsultas.model.Admin;
 import tech.ada.java.agendamentoconsultas.repository.AdminRepository;
 
+import java.util.UUID;
+
 public class IntegrationTestsExtension implements BeforeAllCallback {
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
@@ -15,6 +17,7 @@ public class IntegrationTestsExtension implements BeforeAllCallback {
         String encryptedPassword = new BCryptPasswordEncoder().encode("admin");
         Admin admin = new Admin();
         admin.setName("admin-test");
+        admin.setUuid(UUID.fromString("8c0dcc19-70ac-411a-b0a6-cd09741e9e59"));
         admin.setPassword(encryptedPassword);
         admin.setEmail("admin@admin.com");
         repository.save(admin);
