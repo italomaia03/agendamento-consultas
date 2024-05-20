@@ -1,19 +1,25 @@
 package utils;
 
+import lombok.Getter;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tech.ada.java.agendamentoconsultas.model.Admin;
 import tech.ada.java.agendamentoconsultas.repository.AdminRepository;
+import tech.ada.java.agendamentoconsultas.security.service.TokenService;
 
 import java.util.UUID;
 
-public class IntegrationTestsExtension implements BeforeAllCallback {
+public class AdminIntegrationTestsExtension implements BeforeAllCallback {
+    @Getter
+    private static String token;
+
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
         var appContext = SpringExtension.getApplicationContext(extensionContext);
         var repository = appContext.getBean(AdminRepository.class);
+        var tokenService = appContext.getBean(TokenService.class);
         String encryptedPassword = new BCryptPasswordEncoder().encode("admin");
         Admin admin = new Admin();
         admin.setName("admin-test");
@@ -21,5 +27,7 @@ public class IntegrationTestsExtension implements BeforeAllCallback {
         admin.setPassword(encryptedPassword);
         admin.setEmail("admin@admin.com");
         repository.save(admin);
+        token = tokenService.generatedToken(admin);
     }
+
 }
