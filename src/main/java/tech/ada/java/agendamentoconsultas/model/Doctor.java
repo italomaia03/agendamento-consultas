@@ -1,6 +1,8 @@
 package tech.ada.java.agendamentoconsultas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +28,14 @@ public class Doctor implements UserDetails, AuthenticatedUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "O campo nome não pode ser nulo ou vazio")
     private String name;
+    @NotBlank(message = "O campo CRM não pode ser nulo ou vazio")
     private String crm;
+    @Email
+    @NotBlank(message = "O campo e-mail não pode ser nulo ou vazio")
     private String email;
+    @NotBlank(message = "O campo senha não pode ser nulo ou vazio")
     private String password;
     private Boolean isActive = true;
     private String specialty;
