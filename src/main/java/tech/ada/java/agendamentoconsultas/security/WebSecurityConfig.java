@@ -53,11 +53,6 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new AuthenticationEntryPoint() {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            }
-        };
+        return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
 }
