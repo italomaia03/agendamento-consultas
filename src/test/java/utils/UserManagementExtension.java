@@ -10,7 +10,6 @@ import tech.ada.java.agendamentoconsultas.model.Address;
 import tech.ada.java.agendamentoconsultas.model.Admin;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Patient;
-import tech.ada.java.agendamentoconsultas.model.enums.UserRole;
 import tech.ada.java.agendamentoconsultas.repository.AdminRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
