@@ -5,32 +5,27 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import tech.ada.java.agendamentoconsultas.service.AuthService;
-import tech.ada.java.agendamentoconsultas.service.PatientService;
+import utils.UserManagementExtension;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
+@ExtendWith(UserManagementExtension.class)
 public class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @MockBean
-    private AuthService authService;
-    @MockBean
-    private PatientService patientService;
-
     private String baseUrl = "/api/v1/auth";
 
     @Test
@@ -168,6 +163,19 @@ public class AuthControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @Order(3)
+    public void logout_MustSuccess() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get(baseUrl + "/logout")
+                        .header("Authorization", "Bearer " + UserManagementExtension.getAdminToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 }
