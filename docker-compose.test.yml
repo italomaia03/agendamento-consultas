@@ -5,7 +5,7 @@ services:
     image: redis:7.2.4-alpine
     restart: unless-stopped
     ports:
-      - "63003:6379"
+      - "64821:6379"
     command: redis-server --save 20 1 --loglevel warning
     networks:
       - redis
