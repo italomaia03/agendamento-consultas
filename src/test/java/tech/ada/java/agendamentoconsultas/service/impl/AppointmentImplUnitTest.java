@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -120,7 +121,16 @@ public class AppointmentImplUnitTest {
     public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {}
 
     @Test
-    public void find_appointment_findAppointmentByPatientUuid() {}    
+    public void find_appointment_findAppointmentByPatientUuid()  {
+        Mockito.when(appointmentRepository.findAllByDoctorUuid(doctorUuid)).thenReturn(List.of(appointment));
+        Mockito.when(modelMapper.map(appointment, AppointmentResponseDto.class)).thenReturn(response);
+
+        List<AppointmentResponseDto> result = appointmentService.findAllByDoctorUuid(doctorUuid);
+
+        Assertions.assertFalse(result.isEmpty());
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(response, result.get(0));
+    }
 
     @Test
     public void find_appointment_findAppointmentByDoctorUuid() {}   
