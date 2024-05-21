@@ -226,5 +226,25 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void delete_appointment_mustChanchingAppointmentStatusWithSuccess() {}
+    public void delete_appointment_mustChanchingAppointmentStatusWithSuccess() {
+
+        UUID doctorUuid = UUID.randomUUID();
+        UUID appointmentUuid = UUID.randomUUID();
+
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentStatus(AppointmentStatus.WAITING);
+
+        when(doctorRepository.findByUuid(doctorUuid))
+                .thenReturn(Optional.of(new Doctor()));
+
+        when(appointmentRepository.findByDoctorAndUuid(Mockito.any(Doctor.class), Mockito.eq(appointmentUuid)))
+                .thenReturn(Optional.of(appointment));
+
+        AppointmentDeleteRequestDto requestDto = new AppointmentDeleteRequestDto();
+        requestDto.setAppointmentStatus(AppointmentStatus.CANCELLED);
+
+        appointmentService.delete(requestDto, doctorUuid, appointmentUuid);
+
+        assertEquals(AppointmentStatus.CANCELLED, appointment.getAppointmentStatus());
+    }
 }
