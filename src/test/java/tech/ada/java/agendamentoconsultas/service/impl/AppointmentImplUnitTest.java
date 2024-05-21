@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
+import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentDeleteRequestDto;
@@ -133,7 +134,15 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void find_appointment_findAppointmentByDoctorUuid() {}   
+    public void find_appointment_findAppointmentByDoctorUuid() {
+        UUID invalidPatientUuid = UUID.fromString("11111111-1b46-4bf6-ae56-000000000000");
+        Mockito.when(patientRepository.findByUuid(invalidPatientUuid)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(PatientNotFoundException.class, () -> {
+            appointmentService.findAllByPatient(invalidPatientUuid);
+        });
+    }
+
 
     @Test
     public void find_appointment_findAppointmentByPatientUuidNotFindShouldReturnError() {}   
