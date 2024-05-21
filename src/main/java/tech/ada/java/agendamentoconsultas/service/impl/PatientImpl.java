@@ -85,4 +85,10 @@ public class PatientImpl implements PatientService{
             }
         };
     }
+
+    @Override
+    public PatientDtoResponse getPatientByEmail(String email) {
+        Patient paciente = patientRepository.findByEmail(email).orElseThrow(PatientNotFoundException::new);
+        return new PatientDtoResponse(paciente.getNome(), paciente.getEmail(), paciente.getUuid());
+    }
 }
