@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
+import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentDeleteRequestDto;
@@ -26,6 +27,9 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -72,30 +76,30 @@ public class AppointmentImplUnitTest {
         appointment = new Appointment();
         response = new AppointmentResponseDto();
     
-        Mockito.when(appointmentRepository.findByDoctorAndUuid(doctor, appointmentUuid)).thenReturn(Optional.of(appointment));
-        Mockito.when(appointmentRepository.findByDoctorAndUuid(doctor, UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
+        when(appointmentRepository.findByDoctorAndUuid(doctor, appointmentUuid)).thenReturn(Optional.of(appointment));
+        when(appointmentRepository.findByDoctorAndUuid(doctor, UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
     
-        Mockito.when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.of(doctor));
-        Mockito.when(doctorRepository.findByUuid(UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
+        when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.of(doctor));
+        when(doctorRepository.findByUuid(UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
         
-        Mockito.when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.of(patient));
-        Mockito.when(patientRepository.findByUuid(UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.of(patient));
+        when(patientRepository.findByUuid(UUID.fromString("11111111-1b46-4bf6-ae56-000000000000"))).thenReturn(Optional.empty());
         
-        Mockito.when(appointmentRepository.appointmentExists(
+        when(appointmentRepository.appointmentExists(
             Mockito.any(), Mockito.eq(doctorUuid), Mockito.any())).thenReturn(false);
         
-        Mockito.when(appointmentRepository.appointmentExists(
+        when(appointmentRepository.appointmentExists(
             Mockito.any(), Mockito.eq(UUID.fromString("11111111-1b46-4bf6-ae56-000000000000")), Mockito.any())).thenReturn(true);
         
-        Mockito.when(modelMapper.map(request, Appointment.class)).thenReturn(appointment);
+        when(modelMapper.map(request, Appointment.class)).thenReturn(appointment);
     
-        Mockito.when(appointmentRepository
+        when(appointmentRepository
             .findAllByPatient(patient)
             .stream()
             .map(element -> modelMapper.map(element, AppointmentResponseDto.class))
             .toList()).thenReturn(List.of());
     
-        Mockito.when(appointmentRepository
+        when(appointmentRepository
             .findAllByDoctorUuid(doctorUuid)
             .stream()
             .map(element -> modelMapper.map(element, AppointmentResponseDto.class))
@@ -105,14 +109,25 @@ public class AppointmentImplUnitTest {
     @Test
     public void create_appointment_createWithSuccessfullAppointment(){
         appointmentService.create(request, doctorUuid, patientUuid);
-        Mockito.verify(appointmentRepository, Mockito.times(1)).save(appointment);
+        verify(appointmentRepository, Mockito.times(1)).save(appointment);
     }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {}
+    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {
+        when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.empty());
+
+        assertThrows(DoctorNotFoundException.class, () -> {
+            appointmentService.create(request, doctorUuid, patientUuid);
+        });
+
+        verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+
+    }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindPatient() {}
+    public void create_appointment_notCreateAppointmentIfNotFindPatient() {
+
+    }
 
     @Test
     public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {}
