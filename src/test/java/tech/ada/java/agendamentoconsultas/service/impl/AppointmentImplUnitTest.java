@@ -1,5 +1,6 @@
 package tech.ada.java.agendamentoconsultas.service.impl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
+import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentDeleteRequestDto;
@@ -51,6 +53,8 @@ public class AppointmentImplUnitTest {
     private Appointment appointment;
     private AppointmentDeleteRequestDto deleteDto;
     private AppointmentResponseDto response;
+    @InjectMocks
+    private DoctorServiceImpl sut;
     
     @BeforeEach
     void setUp() {
@@ -109,7 +113,11 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {}
+    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {
+        UUID uuid = UUID.fromString("11111111-1b46-4bf6-ae56-000000000000");
+        Mockito.when(appointmentRepository.findByDoctorAndUuid(doctor, uuid)).thenReturn(Optional.empty());
+        Assertions.assertThrows(DoctorNotFoundException.class, () -> sut.findByUuid(uuid));
+    }
 
     @Test
     public void create_appointment_notCreateAppointmentIfNotFindPatient() {}
