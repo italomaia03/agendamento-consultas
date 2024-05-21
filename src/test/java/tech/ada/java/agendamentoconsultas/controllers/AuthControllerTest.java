@@ -31,8 +31,6 @@ public class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private TokenRepository tokenRepository;
     private String baseUrl = "/api/v1/auth";
 
     @Test
