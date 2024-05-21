@@ -126,7 +126,16 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindPatient() {}
+    public void create_appointment_notCreateAppointmentIfNotFindPatient() {
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.empty());
+
+        assertThrows(PatientNotFoundException.class, () -> {
+            appointmentService.create(request, doctorUuid, patientUuid);
+        });
+
+        verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+
+    }
 
     @Test
     public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {}
