@@ -157,7 +157,7 @@ public class AppointmentImplUnitTest {
 
     @Test
     public void find_appointment_findAppointmentByPatientUuid() {
-        // Mocking
+
         UUID patientUuid = UUID.randomUUID();
         Patient patient = new Patient();
         List<Appointment> appointments = new ArrayList<>();
