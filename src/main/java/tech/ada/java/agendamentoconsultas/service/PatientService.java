@@ -10,4 +10,5 @@ public interface PatientService {
     PatientDtoResponse createPatient(PatientDtoRequest request);
     void update(PatientUpdateRequestDto request, UUID uuid);
     void deletePatient(UUID uuid);
+    PatientDtoResponse getPatientByEmail(String email);
 }

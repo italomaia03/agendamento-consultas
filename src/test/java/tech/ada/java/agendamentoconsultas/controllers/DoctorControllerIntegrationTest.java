@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -20,6 +21,7 @@ import utils.UserManagementExtension;
 @SpringBootTest
 @ExtendWith(UserManagementExtension.class)
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class DoctorControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
@@ -45,7 +47,7 @@ public class DoctorControllerIntegrationTest {
                                 .content("""
                                         {
                                             "name": "Test",
-                                            "email": "test@test.com",
+                                            "email": "doctor@test.com",
                                             "password": "senha_Dificil123",
                                             "crm": "1234-CE",
                                             "specialty": "cardiologista",
@@ -88,7 +90,7 @@ public class DoctorControllerIntegrationTest {
     @Test
     public void update_doctorFindWithSuccess() throws Exception {
         AddressRequestDto adress = new AddressRequestDto("58434-630", 0);
-        DoctorDtoRequest update = new DoctorDtoRequest("nome", "test@test.com", "senhaDificil123@", "1234-CE", "proctologista", adress);
+        DoctorDtoRequest update = new DoctorDtoRequest("nome", "doctor@test.com", "senhaDificil123@", "1234-CE", "proctologista", adress);
         ObjectMapper objectMapper = new ObjectMapper();
         String content = objectMapper.writeValueAsString(update);
 
