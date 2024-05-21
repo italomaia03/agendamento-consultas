@@ -233,7 +233,18 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void delete_appointment_notFindAppointmentShouldReturnError() {} 
+    public void delete_appointment_notFindAppointmentShouldReturnError() {
+        UUID doctorUuid = UUID.randomUUID();
+        UUID appointmentUuid = UUID.randomUUID();
+
+        when(doctorRepository.findByUuid(doctorUuid))
+                .thenReturn(Optional.empty());
+
+        assertThrows(DoctorNotFoundException.class, () -> {
+            appointmentService.delete(new AppointmentDeleteRequestDto(), doctorUuid, appointmentUuid);
+        });
+
+    }
 
     @Test
     public void delete_appointment_notChanchingAppointmentStatusToWaiting() {}
