@@ -183,7 +183,16 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void delete_appointment_notFindDoctorShouldReturnError() {}
+    public void delete_appointment_notFindDoctorShouldReturnError() {
+        UUID invalidDoctorUuid = UUID.fromString("11111111-1b46-4bf6-ae56-000000000000");
+        Mockito.when(doctorRepository.findByUuid(invalidDoctorUuid)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(DoctorNotFoundException.class, () -> {
+            appointmentService.delete(deleteDto, invalidDoctorUuid, appointmentUuid);
+        });
+
+        Mockito.verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+    }
 
     @Test
     public void delete_appointment_notFindAppointmentShouldReturnError() {} 
