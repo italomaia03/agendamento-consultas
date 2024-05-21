@@ -18,12 +18,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
+import utils.RedisContainerExtension;
 import utils.UserManagementExtension;
 
 import java.util.UUID;
 
 @SpringBootTest
-@ExtendWith(UserManagementExtension.class)
+@ExtendWith({UserManagementExtension.class, RedisContainerExtension.class})
 @AutoConfigureMockMvc
 @TestMethodOrder(OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)

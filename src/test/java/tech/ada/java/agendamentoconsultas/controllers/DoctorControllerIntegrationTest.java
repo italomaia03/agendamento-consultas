@@ -16,10 +16,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoRequest;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
+import utils.RedisContainerExtension;
 import utils.UserManagementExtension;
 
 @SpringBootTest
-@ExtendWith(UserManagementExtension.class)
+@ExtendWith({UserManagementExtension.class, RedisContainerExtension.class})
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class DoctorControllerIntegrationTest {
