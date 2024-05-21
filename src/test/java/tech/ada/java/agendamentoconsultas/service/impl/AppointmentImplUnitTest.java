@@ -139,7 +139,15 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void find_appointment_findAppointmentByPatientUuidNotFindShouldReturnError() {}
+    public void find_appointment_findAppointmentByPatientUuidNotFindShouldReturnError() {
+        UUID invalidPatientUuid = UUID.fromString("11111111-1b46-4bf6-ae56-000000000000");
+        Mockito.when(patientRepository.findByUuid(invalidPatientUuid)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(PatientNotFoundException.class, () -> {
+            appointmentService.findAllByPatient(invalidPatientUuid);
+        });
+    }
+
 
     @Test
     public void update_appointment_withSuccess() {}
