@@ -171,7 +171,16 @@ public class AppointmentImplUnitTest {
     }
     
     @Test
-    public void update_appointment_notFindAppointmentShouldReturnError() {}
+    public void update_appointment_notFindAppointmentShouldReturnError() {
+        UUID invalidAppointmentUuid = UUID.fromString("11111111-1b46-4bf6-ae56-000000000000");
+        Mockito.when(appointmentRepository.findByDoctorAndUuid(doctor, appointmentUuid)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            appointmentService.update(request, doctorUuid, invalidAppointmentUuid);
+        });
+
+        Mockito.verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+    }
 
     @Test
     public void delete_appointment_notFindDoctorShouldReturnError() {}
