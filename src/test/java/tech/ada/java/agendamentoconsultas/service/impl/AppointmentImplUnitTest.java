@@ -150,7 +150,13 @@ public class AppointmentImplUnitTest {
 
 
     @Test
-    public void update_appointment_withSuccess() {}
+    public void update_appointment_withSuccess() {
+        Mockito.when(appointmentRepository.findByDoctorAndUuid(doctor, appointmentUuid)).thenReturn(Optional.of(appointment));
+
+        appointmentService.update(request, doctorUuid, appointmentUuid);
+
+        Mockito.verify(appointmentRepository, times(1)).save(appointment);
+    }
 
     @Test
     public void update_appointment_notFindDoctorShouldReturnError() {}
