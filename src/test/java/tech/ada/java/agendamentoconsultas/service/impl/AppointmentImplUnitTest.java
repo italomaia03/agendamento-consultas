@@ -26,10 +26,12 @@ import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -154,7 +156,21 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void find_appointment_findAppointmentByPatientUuid() {}    
+    public void find_appointment_findAppointmentByPatientUuid() {
+        // Mocking
+        UUID patientUuid = UUID.randomUUID();
+        Patient patient = new Patient();
+        List<Appointment> appointments = new ArrayList<>();
+
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.of(patient));
+
+        when(appointmentRepository.findAllByPatient(patient)).thenReturn(appointments);
+
+        List<AppointmentResponseDto> foundAppointments = appointmentService.findAllByPatient(patientUuid);
+
+        assertEquals(appointments.size(), foundAppointments.size());
+
+    }
 
     @Test
     public void find_appointment_findAppointmentByDoctorUuid() {}   
