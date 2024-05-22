@@ -8,25 +8,28 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import tech.ada.java.agendamentoconsultas.model.Dto.AddressRequestDto;
 import tech.ada.java.agendamentoconsultas.model.Dto.DoctorDtoRequest;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
-import utils.RedisContainerExtension;
+import utils.ContainersConfig;
 import utils.UserManagementExtension;
 
 import java.util.stream.Stream;
 
 @SpringBootTest
-@ExtendWith({UserManagementExtension.class, RedisContainerExtension.class})
+@ExtendWith(UserManagementExtension.class)
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Import(ContainersConfig.class)
 public class DoctorControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
