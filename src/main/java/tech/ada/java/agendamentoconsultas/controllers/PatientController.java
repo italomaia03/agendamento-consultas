@@ -6,10 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.annotation.ValidateUserPermission;
+import tech.ada.java.agendamentoconsultas.model.Dto.PatientDtoResponse;
 import tech.ada.java.agendamentoconsultas.model.Dto.PatientUpdateRequestDto;
 import tech.ada.java.agendamentoconsultas.service.PatientService;
 
 import java.util.UUID;
+
 
 
 @RestController
@@ -38,4 +40,12 @@ public class PatientController {
     public void deletePatient(@PathVariable UUID uuid){
         patientService.deletePatient(uuid);
     }
+
+    @GetMapping("/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).ADMIN.name())")
+    public PatientDtoResponse getPatientByEmail(@PathVariable String email) {
+        return patientService.getPatientByEmail(email);
+    }
+    
 }

@@ -1,0 +1,15 @@
+{
+  "priority": 100,
+  "request": {
+    "url": "/invalid/json",
+    "method": "GET"
+  },
+  "response": {
+    "status": 400,
+    "jsonBody": {
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "url": "/65945970/json",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody":{
+      "cep": "65945-970",
+      "logradouro": "Avenida Ulisses Guimarães",
+      "complemento": "749",
+      "bairro": "Centro",
+      "localidade": "Arame",
+      "uf": "MA",
+      "ibge": "2100956",
+      "gia": "",
+      "ddd": "99",
+      "siafi": "1281"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

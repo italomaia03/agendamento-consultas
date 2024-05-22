@@ -3,6 +3,8 @@ package tech.ada.java.agendamentoconsultas.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.ada.java.agendamentoconsultas.annotation.ValidateUserPermission;
@@ -44,6 +46,7 @@ public class AppointmentController {
     @PostMapping("/patients/{patientUuid}/doctors/{doctorUuid}")
     @PreAuthorize("hasRole(T(tech.ada.java.agendamentoconsultas.model.enums.UserRole).PATIENT.name())")
     @ValidateUserPermission
+    @ResponseStatus(HttpStatus.CREATED)
     public AppointmentResponseDto create(@PathVariable UUID patientUuid, @RequestBody @Valid AppointmentRequestDto request, @PathVariable UUID doctorUuid) {
         return appointmentService.create(request, doctorUuid, patientUuid);
     }

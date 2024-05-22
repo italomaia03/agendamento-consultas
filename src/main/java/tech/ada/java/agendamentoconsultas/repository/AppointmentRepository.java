@@ -3,6 +3,7 @@ package tech.ada.java.agendamentoconsultas.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
 import tech.ada.java.agendamentoconsultas.model.Doctor;
 import tech.ada.java.agendamentoconsultas.model.Patient;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     @Query("""
             select (count(a) > 0) from Appointment a
