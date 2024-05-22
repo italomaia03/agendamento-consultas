@@ -79,13 +79,13 @@ public class UserManagementExtension implements BeforeAllCallback, AfterAllCallb
 
     @Override
     public void afterAll(ExtensionContext extensionContext) {
-        var appContext = SpringExtension.getApplicationContext(extensionContext);
-        var adminRepository = appContext.getBean(AdminRepository.class);
-        var doctorRepository = appContext.getBean(DoctorRepository.class);
-        var patientRepository = appContext.getBean(PatientRepository.class);
+        // var appContext = SpringExtension.getApplicationContext(extensionContext);
+        // var adminRepository = appContext.getBean(AdminRepository.class);
+        // var doctorRepository = appContext.getBean(DoctorRepository.class);
+        // var patientRepository = appContext.getBean(PatientRepository.class);
 
-        adminRepository.deleteAll();
-        doctorRepository.deleteAll();
-        patientRepository.deleteAll();
+        // adminRepository.deleteAll();
+        // doctorRepository.deleteAll();
+        // patientRepository.deleteAll();
     }
 }
