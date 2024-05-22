@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
+
+import tech.ada.java.agendamentoconsultas.exception.AppointmentAlreadyExistsException;
 import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
 import tech.ada.java.agendamentoconsultas.model.Appointment;
@@ -120,7 +122,23 @@ public class AppointmentImplUnitTest {
     public void create_appointment_notCreateAppointmentIfNotFindPatient() {}
 
     @Test
-    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {}
+    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {
+                
+        UUID doctorUuid = UUID.randomUUID();
+        UUID patientUuid = UUID.randomUUID();
+        AppointmentRequestDto requestDto = new AppointmentRequestDto();
+        requestDto.setAppointmentDate(LocalDate.now().plusDays(1)); 
+        requestDto.setAppointmentStartTime(LocalTime.now().plusHours(12));
+
+        Doctor doctor = new Doctor();
+        Patient patient = new Patient();
+        when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.of(doctor));
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.of(patient));
+        when(appointmentRepository.appointmentExists(requestDto.getAppointmentDate(), doctorUuid, requestDto.getAppointmentStartTime())).thenReturn(true);
+
+        assertThrows(AppointmentAlreadyExistsException.class, () ->
+                appointmentService.create(requestDto, doctorUuid, patientUuid));
+    }
 
     @Test
     public void find_appointment_findAppointmentByPatientUuid()  {
