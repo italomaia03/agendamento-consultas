@@ -139,7 +139,22 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {
+    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {              
+        UUID doctorUuid = UUID.randomUUID();
+        UUID patientUuid = UUID.randomUUID();
+        AppointmentRequestDto requestDto = new AppointmentRequestDto();
+        requestDto.setAppointmentDate(LocalDate.now().plusDays(1)); 
+        requestDto.setAppointmentStartTime(LocalTime.now().plusHours(12));
+
+        Doctor doctor = new Doctor();
+        Patient patient = new Patient();
+        when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.of(doctor));
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.of(patient));
+        when(appointmentRepository.appointmentExists(requestDto.getAppointmentDate(), doctorUuid, requestDto.getAppointmentStartTime())).thenReturn(true);
+
+        assertThrows(AppointmentAlreadyExistsException.class, () ->
+                appointmentService.create(requestDto, doctorUuid, patientUuid));
+
         when(appointmentRepository.appointmentExists(request.getAppointmentDate(), doctorUuid,
                 request.getAppointmentStartTime())).thenReturn(true);
 
