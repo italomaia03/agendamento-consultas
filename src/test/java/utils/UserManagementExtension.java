@@ -17,7 +17,7 @@ import tech.ada.java.agendamentoconsultas.security.service.TokenService;
 
 import java.util.UUID;
 
-public class UserManagementExtension implements BeforeAllCallback, AfterAllCallback {
+public class UserManagementExtension implements BeforeAllCallback {
     @Getter
     private static String adminToken;
     @Getter
@@ -74,17 +74,5 @@ public class UserManagementExtension implements BeforeAllCallback, AfterAllCallb
         );
         user.setUuid(UUID.fromString("a1daf9c6-3b98-4a61-ba52-19a8e6517eae"));
         return repository.save(user);
-    }
-
-    @Override
-    public void afterAll(ExtensionContext extensionContext) {
-        // var appContext = SpringExtension.getApplicationContext(extensionContext);
-        // var adminRepository = appContext.getBean(AdminRepository.class);
-        // var doctorRepository = appContext.getBean(DoctorRepository.class);
-        // var patientRepository = appContext.getBean(PatientRepository.class);
-
-        // adminRepository.deleteAll();
-        // doctorRepository.deleteAll();
-        // patientRepository.deleteAll();
     }
 }

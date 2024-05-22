@@ -21,7 +21,6 @@ public class AppointmentRequestDto implements Serializable {
     @FutureOrPresent(message = "Informe uma data válida a partir da data atual")
     private LocalDate appointmentDate;
     @NotNull
-    @FutureOrPresent(message = "Informe um horário válido")
     private LocalTime appointmentStartTime;
     @NotBlank(message = "Informe uma descrição para a consulta")
     private String appointmentDescription;

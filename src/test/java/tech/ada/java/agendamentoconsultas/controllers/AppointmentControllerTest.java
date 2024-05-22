@@ -1,40 +1,33 @@
 package tech.ada.java.agendamentoconsultas.controllers;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import tech.ada.java.agendamentoconsultas.model.Appointment;
-import tech.ada.java.agendamentoconsultas.model.Doctor;
-import tech.ada.java.agendamentoconsultas.model.Patient;
-import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentDeleteRequestDto;
-import tech.ada.java.agendamentoconsultas.model.Dto.AppointmentRequestDto;
 import tech.ada.java.agendamentoconsultas.model.enums.AppointmentStatus;
 import tech.ada.java.agendamentoconsultas.repository.AppointmentRepository;
 import tech.ada.java.agendamentoconsultas.repository.DoctorRepository;
 import tech.ada.java.agendamentoconsultas.repository.PatientRepository;
-import utils.RedisContainerExtension;
+import utils.ContainersConfig;
 import utils.UserManagementExtension;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ExtendWith({UserManagementExtension.class, RedisContainerExtension.class})
+@ExtendWith(UserManagementExtension.class)
+@Import(ContainersConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AppointmentControllerTest {
 
