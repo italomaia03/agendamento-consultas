@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
-
 import tech.ada.java.agendamentoconsultas.exception.AppointmentAlreadyExistsException;
 import tech.ada.java.agendamentoconsultas.exception.DoctorNotFoundException;
 import tech.ada.java.agendamentoconsultas.exception.PatientNotFoundException;
@@ -116,14 +115,31 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {}
+    public void create_appointment_notCreateAppointmentIfNotFindDoctor() {
+        when(doctorRepository.findByUuid(doctorUuid)).thenReturn(Optional.empty());
+
+        assertThrows(DoctorNotFoundException.class, () -> {
+            appointmentService.create(request, doctorUuid, patientUuid);
+        });
+
+        verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+
+    }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfNotFindPatient() {}
+    public void create_appointment_notCreateAppointmentIfNotFindPatient() {
+        when(patientRepository.findByUuid(patientUuid)).thenReturn(Optional.empty());
+
+        assertThrows(PatientNotFoundException.class, () -> {
+            appointmentService.create(request, doctorUuid, patientUuid);
+        });
+
+        verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+
+    }
 
     @Test
-    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {
-                
+    public void create_appointment_notCreateAppointmentIfHaveSameAppointment() {              
         UUID doctorUuid = UUID.randomUUID();
         UUID patientUuid = UUID.randomUUID();
         AppointmentRequestDto requestDto = new AppointmentRequestDto();
@@ -138,6 +154,18 @@ public class AppointmentImplUnitTest {
 
         assertThrows(AppointmentAlreadyExistsException.class, () ->
                 appointmentService.create(requestDto, doctorUuid, patientUuid));
+
+        when(appointmentRepository.appointmentExists(request.getAppointmentDate(), doctorUuid,
+                request.getAppointmentStartTime())).thenReturn(true);
+
+
+        assertThrows(AppointmentAlreadyExistsException.class, () -> {
+            appointmentService.create(request, doctorUuid, patientUuid);
+        });
+
+
+        verify(appointmentRepository, never()).save(Mockito.any(Appointment.class));
+
     }
 
     @Test
@@ -220,10 +248,41 @@ public class AppointmentImplUnitTest {
     }
 
     @Test
-    public void delete_appointment_notFindAppointmentShouldReturnError() {} 
+    public void delete_appointment_notFindAppointmentShouldReturnError() {
+        UUID doctorUuid = UUID.randomUUID();
+        UUID appointmentUuid = UUID.randomUUID();
+
+        when(doctorRepository.findByUuid(doctorUuid))
+                .thenReturn(Optional.empty());
+
+        assertThrows(DoctorNotFoundException.class, () -> {
+            appointmentService.delete(new AppointmentDeleteRequestDto(), doctorUuid, appointmentUuid);
+        });
+
+    }
 
     @Test
-    public void delete_appointment_notChanchingAppointmentStatusToWaiting() {}
+    public void delete_appointment_notChanchingAppointmentStatusToWaiting() {
+        UUID doctorUuid = UUID.randomUUID();
+        UUID appointmentUuid = UUID.randomUUID();
+
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentStatus(AppointmentStatus.RESOLVED);
+
+        when(doctorRepository.findByUuid(doctorUuid))
+                .thenReturn(Optional.of(new Doctor()));
+
+        when(appointmentRepository.findByDoctorAndUuid(Mockito.any(Doctor.class), Mockito.eq(appointmentUuid)))
+                .thenReturn(Optional.of(appointment));
+
+        AppointmentDeleteRequestDto requestDto = new AppointmentDeleteRequestDto();
+        requestDto.setAppointmentStatus(AppointmentStatus.RESOLVED);
+
+        appointmentService.delete(requestDto, doctorUuid, appointmentUuid);
+
+        assertNotEquals(AppointmentStatus.WAITING, appointment.getAppointmentStatus());
+
+    }
 
     @Test
     public void delete_appointment_mustChanchingAppointmentStatusWithSuccess() {
